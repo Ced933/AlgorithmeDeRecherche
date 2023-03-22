@@ -23,8 +23,14 @@
         <section>
             <div class="input-control">
 
-                <input class="input" type="search" placeholder="Rechercher une recette">
+                <input class="input" id="search-main" type="search" placeholder="Rechercher une recette">
                 <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </section>
+        <section class="tag-section">
+            <div class="tag-body">
+                <span class="tag-span-ingredient">lait</span>
+                <img src="cross-circle.svg" alt="cross">
             </div>
         </section>
         <section class="dropdown-container d-flex">
@@ -60,7 +66,7 @@
                         <div tabindex="1" class="select-appliance">
                             <div class="div-select">
 
-                                <input type="search" class="selected input-selected-appliance"
+                                <input id="search-appliance" type="search" class="selected input-selected-appliance"
                                     aria-label="menu accordéon" value="Appareils" placeholder="Recherche un ingédient">
                                 <div id="caret-appliance" class="caret"></div>
                             </div>
@@ -84,7 +90,7 @@
                         <div tabindex="1" class="select-ustensils">
                             <div class="div-select">
 
-                                <input type="search" class="selected input-selected-ustensils"
+                                <input id="search-ustensils" type="search" class="selected input-selected-ustensils"
                                     aria-label="menu accordéon" value="Ustensiles"
                                     placeholder="Recherche un ustensiles">
                                 <div id="caret-ustensils" class="caret"></div>
