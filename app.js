@@ -40,7 +40,58 @@ class App {
             });
             // a l'intérieur du ul je mets tous mes li 
             ulHtmlList.innerHTML = ingredientItem;
-            return setIngredient;
+            const allItemIngredient = document.querySelectorAll('.li-ingredient');
+            const tagSection = document.querySelector('.tag-section');
+
+            //                     const cible = e.target
+            // console.log()
+            function createTag() {
+                // lorsqu'on clique sur un tage on doit pouvoir le faire qu'une seule fois 
+                // c'est pour ça qu'on va creer une variable clicked et lui affecter false 
+
+
+                allItemIngredient.forEach(li => {
+
+                    let clicked = false;
+                    li.addEventListener('click', e => {
+                        if (clicked == false) {
+                            // je recupère la valeur du li sur le quel je viens de cliquer 
+                            const text = e.target.innerHTML
+                            // je crée mon tag 
+                            const divSpan = document.createElement('div');
+                            divSpan.classList.add('tag-body-ingredient');
+                            divSpan.innerHTML = `
+                                <span class="tag-span-ingredient">${text}</span>
+                                <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                            `
+                            tagSection.appendChild(divSpan);
+                            // si on a passé cette étape c'est que c'est la premieere fois quon clique sur le li 
+                            // notre clicked vaut true maintenant 
+                            clicked = true;
+                            const crosses = document.querySelectorAll('.cross-tag');
+
+                            crosses.forEach(cross => {
+
+                                cross.addEventListener('click', () => {
+                                    // lorsque je clique sur la croix elle efface mon tag et reinitialise 
+                                    // la variable a false  on va donc pouvoir recliquer dessus
+                                    divSpan.style.display = 'none';
+
+                                    clicked = false;
+                                })
+                            })
+
+                        }
+                        else {
+                            console.log('vous avez déja cliquer sur ce bouton');
+                        }
+
+
+                    })
+                })
+            }
+            createTag();
+            // return setIngredient;
         }
         listOfIngredient();
 
@@ -56,6 +107,57 @@ class App {
             });
 
             ulHtmlListAppliance.innerHTML = appliancesItem;
+            const allItem = document.querySelectorAll('.li-appliance');
+            const tagSection = document.querySelector('.tag-section');
+
+            //                     const cible = e.target
+            // console.log()
+            function createTag() {
+                // lorsqu'on clique sur un tage on doit pouvoir le faire qu'une seule fois 
+                // c'est pour ça qu'on va creer une variable clicked et lui affecter false 
+
+
+                allItem.forEach(li => {
+
+                    let clicked = false;
+                    li.addEventListener('click', e => {
+                        if (clicked == false) {
+                            // je recupère la valeur du li sur le quel je viens de cliquer 
+                            const text = e.target.innerHTML
+                            // je crée mon tag 
+                            const divSpan = document.createElement('div');
+                            divSpan.classList.add('tag-body-appliance');
+                            divSpan.innerHTML = `
+                                <span class="tag-span-ingredient">${text}</span>
+                                <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                            `
+                            tagSection.appendChild(divSpan);
+                            // si on a passé cette étape c'est que c'est la premieere fois quon clique sur le li 
+                            // notre clicked vaut true maintenant 
+                            clicked = true;
+                            const crosses = document.querySelectorAll('.cross-tag');
+
+                            crosses.forEach(cross => {
+
+                                cross.addEventListener('click', () => {
+                                    // lorsque je clique sur la croix elle efface mon tag et reinitialise 
+                                    // la variable a false  on va donc pouvoir recliquer dessus
+                                    divSpan.style.display = 'none';
+
+                                    clicked = false;
+                                })
+                            })
+
+                        }
+                        else {
+                            console.log('vous avez déja cliquer sur ce bouton');
+                        }
+
+
+                    })
+                })
+            }
+            createTag();
         }
         listOfAppliance();
 
@@ -74,6 +176,57 @@ class App {
             });
 
             ulHtmlListUstensils.innerHTML = ustensilsItem;
+            const allItemUstensil = document.querySelectorAll('.li-ustensil');
+            const tagSection = document.querySelector('.tag-section');
+
+            //                     const cible = e.target
+            // console.log()
+            function createTag() {
+                // lorsqu'on clique sur un tage on doit pouvoir le faire qu'une seule fois 
+                // c'est pour ça qu'on va creer une variable clicked et lui affecter false 
+
+
+                allItemUstensil.forEach(li => {
+
+                    let clicked = false;
+                    li.addEventListener('click', e => {
+                        if (clicked == false) {
+                            // je recupère la valeur du li sur le quel je viens de cliquer 
+                            const text = e.target.innerHTML
+                            // je crée mon tag 
+                            const divSpan = document.createElement('div');
+                            divSpan.classList.add('tag-body-ustensil');
+                            divSpan.innerHTML = `
+                                <span class="tag-span-ingredient">${text}</span>
+                                <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                            `
+                            tagSection.appendChild(divSpan);
+                            // si on a passé cette étape c'est que c'est la premieere fois quon clique sur le li 
+                            // notre clicked vaut true maintenant 
+                            clicked = true;
+                            const crosses = document.querySelectorAll('.cross-tag');
+
+                            crosses.forEach(cross => {
+
+                                cross.addEventListener('click', () => {
+                                    // lorsque je clique sur la croix elle efface mon tag et reinitialise 
+                                    // la variable a false  on va donc pouvoir recliquer dessus
+                                    divSpan.style.display = 'none';
+
+                                    clicked = false;
+                                })
+                            })
+
+                        }
+                        else {
+                            console.log('vous avez déja cliquer sur ce bouton');
+                        }
+
+
+                    })
+                })
+            }
+            createTag();
         }
         listOfUstenciles();
 

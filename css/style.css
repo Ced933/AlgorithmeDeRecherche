@@ -45,22 +45,38 @@ header {
     margin: 20px 0;
 }
 
-.tag-body {
+.tag-body-appliance {
+    background: #68D9A4;
+    padding: 10px;
+    color: #fff;
+    border-radius: 5px;
+    display: inline-block;
+}
+
+.tag-body-ingredient {
     background: #3282F7;
     padding: 10px;
     color: #fff;
     border-radius: 5px;
     display: inline-block;
+}
 
+.tag-body-ustensil {
+    background: #ED6454;
+    padding: 10px;
+    color: #fff;
+    border-radius: 5px;
+    display: inline-block;
 }
 
 .tag-body span {
     margin-right: 10px;
 }
 
-.tag-body img {
+.cross-tag {
     position: relative;
     bottom: 2px;
+    cursor: pointer;
 }
 
 #search-ingredient::placeholder,
