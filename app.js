@@ -36,7 +36,7 @@ class App {
             let ingredientItem = "";
             // je boucle le Set
             setIngredient.forEach(function (value) {
-                ingredientItem += '<li>' + value + '</li>';
+                ingredientItem += '<li class="li-ingredient">' + value + '</li>';
             });
             // a l'intérieur du ul je mets tous mes li 
             ulHtmlList.innerHTML = ingredientItem;
@@ -52,7 +52,7 @@ class App {
             let appliancesItem = "";
 
             setAppliance.forEach(function (value) {
-                appliancesItem += '<li>' + value + '</li>';
+                appliancesItem += '<li class="li-appliance">' + value + '</li>';
             });
 
             ulHtmlListAppliance.innerHTML = appliancesItem;
@@ -70,7 +70,7 @@ class App {
             let ustensilsItem = "";
 
             setUstensils.forEach(function (value) {
-                ustensilsItem += '<li>' + value + '</li>';
+                ustensilsItem += '<li class ="li-ustensil">' + value + '</li>';
             });
 
             ulHtmlListUstensils.innerHTML = ustensilsItem;
@@ -122,27 +122,85 @@ class App {
 
         }
 
+        // Search INGREDIENT 
 
         const ingredientInputSearch = document.querySelector('#search-ingredient');
         ingredientInputSearch.addEventListener('input', filterIngredient)
 
-        function filterIngredient(e) {
-            ulHtmlList.innerHTML = "";
-            const searchStringIngredient = e.target.value.toLowerCase();
+        function filterIngredient() {
 
-            // const ingredientFilter = 
+            const filterIngr = ingredientInputSearch.value.toLowerCase();
 
+            const allIngredientItem = document.querySelectorAll('.li-ingredient');
+
+
+            allIngredientItem.forEach((item) => {
+                let text = item.innerHTML;
+                console.log(text);
+                if (text.toLowerCase().includes(filterIngr.toLowerCase())) {
+                    item.style.display = ''
+                } else {
+                    item.style.display = 'none';
+                }
+            })
+
+        }
+
+
+        // SEARCH Appliance 
+
+        const searchInputAppliance = document.querySelector('#search-appliance');
+        searchInputAppliance.addEventListener("input", filterAppliance)
+
+        function filterAppliance() {
+
+            const filter = searchInputAppliance.value.toLowerCase();
+
+            const allItem = document.querySelectorAll('.li-appliance');
+
+
+            allItem.forEach((item) => {
+                let text = item.innerHTML;
+                console.log(text);
+                if (text.toLowerCase().includes(filter.toLowerCase())) {
+                    item.style.display = ''
+                } else {
+                    item.style.display = 'none';
+                }
+            })
 
         }
 
 
 
+        // SEARCH USTENSILS 
+
+        const searchInputUstensil = document.querySelector('#search-ustensils');
+        searchInputUstensil.addEventListener("input", filterUstensil)
+
+        function filterUstensil() {
+
+            const filterUst = searchInputUstensil.value.toLowerCase();
+
+            const allUstensilsItem = document.querySelectorAll('.li-ustensil');
 
 
+            allUstensilsItem.forEach((item) => {
+                let text = item.innerHTML;
+                console.log(text);
+                if (text.toLowerCase().includes(filterUst.toLowerCase())) {
+                    item.style.display = ''
+                } else {
+                    item.style.display = 'none';
+
+                }
+            })
+
+        }
 
 
         // a cahque fois qu'on ecrit a l'intérieur du input ça déclanche notre fonction filterData
-        mainInputSearch.addEventListener('input', filterData)
+        // mainInputSearch.addEventListener('input', filterData)
 
         // function verifyLength(e) {
 
@@ -152,18 +210,18 @@ class App {
         //     }
         // }
 
-        function filterData(e) {
+        // function filterData(e) {
 
-            figureSection.innerHTML = "";
-            // ce que je suis entrain de chercher dans l'input
-            const searchString = e.target.value.toLowerCase();
-            // création d'un tableau avec ma recherche actuelle 
-            const filterArr = recipes.filter(el =>
-                el.name.toLowerCase().includes(searchString))
+        //     figureSection.innerHTML = "";
+        //     // ce que je suis entrain de chercher dans l'input
+        //     const searchString = e.target.value.toLowerCase();
+        //     // création d'un tableau avec ma recherche actuelle 
+        //     const filterArr = recipes.filter(el =>
+        //         el.name.toLowerCase().includes(searchString))
 
-            createRecipesCard(filterArr)
+        //     createRecipesCard(filterArr)
 
-        }
+        // }
 
 
 
