@@ -10,9 +10,7 @@ class App {
         // console.log(this.recetteApi);
         // Les 50 recettes 
         const dataRecipes = await this.recetteApi.getApi();
-        // console.log(dataRecipes.recipes[0].ingredients.map(item => {
-        //     item.ingredient
-        // }));
+
         // destructuring  pour avoir que le tableau des recette et non pas plusieur index 
         const { recipes } = await this.recetteApi.getApi();
 
@@ -22,8 +20,37 @@ class App {
         //     console.log(ingr.ingredient);
         // });
 
-
+        let figureSection = document.querySelector('.figure-section');
         // liste de tous les ingrédients
+        let arrTag = [];
+
+        function getSpanValue() {
+            const AllTag = document.querySelector('.tag-span-appliance').innerHTML;
+            if (AllTag === 'Blender') {
+                figureSection.innerHTML = "";
+
+                // ce que je suis entrain de chercher dans l'input
+                const searchString = 'Blender';
+                // création d'un tableau avec ma recherche actuelle 
+                const filterArr = recipes.filter(el =>
+                    el.appliance.includes(searchString))
+                console.log(filterArr);
+                createRecipesCard(filterArr)
+
+
+
+            }
+            // arrTag.forEach(span => {
+
+            //     arrTag.push(span.textContent);
+            // })
+            // console.log(arrTag)
+
+            // // AllTag.push(arrTag);
+            // console.log(AllTag);
+
+        }
+        getSpanValue();
 
         const ulHtmlList = document.querySelector('.ul-container-list');
         function listOfIngredient() {
@@ -43,8 +70,7 @@ class App {
             const allItemIngredient = document.querySelectorAll('.li-ingredient');
             const tagSection = document.querySelector('.tag-section');
 
-            //                     const cible = e.target
-            // console.log()
+
             function createTag() {
                 // lorsqu'on clique sur un tage on doit pouvoir le faire qu'une seule fois 
                 // c'est pour ça qu'on va creer une variable clicked et lui affecter false 
@@ -78,6 +104,7 @@ class App {
                                     divSpan.style.display = 'none';
 
                                     clicked = false;
+
                                 })
                             })
 
@@ -85,8 +112,6 @@ class App {
                         else {
                             console.log('vous avez déja cliquer sur ce bouton');
                         }
-
-
                     })
                 })
             }
@@ -132,6 +157,7 @@ class App {
                                 <img class="cross-tag" src="cross-circle.svg" alt="cross">
                             `
                             tagSection.appendChild(divSpan);
+
                             // si on a passé cette étape c'est que c'est la premieere fois quon clique sur le li 
                             // notre clicked vaut true maintenant 
                             clicked = true;
@@ -143,8 +169,9 @@ class App {
                                     // lorsque je clique sur la croix elle efface mon tag et reinitialise 
                                     // la variable a false  on va donc pouvoir recliquer dessus
                                     divSpan.style.display = 'none';
-
                                     clicked = false;
+
+
                                 })
                             })
 
@@ -241,7 +268,7 @@ class App {
         //     this.sectionRecipe.appendChild(Template.createRecipeCard());
 
         // });
-        let figureSection = document.querySelector('.figure-section');
+        // let figureSection = document.querySelector('.figure-section');
         let mainInputSearch = document.querySelector('#search-main');
 
         let dataArray;
@@ -250,9 +277,10 @@ class App {
 
             createRecipesCard(recipes);
         }
-        getRecipes();
+        // getRecipes();
 
         console.log(dataRecipes);
+
         function createRecipesCard(listRecipe) {
 
             listRecipe.forEach(recipe => {
@@ -289,7 +317,7 @@ class App {
 
             allIngredientItem.forEach((item) => {
                 let text = item.innerHTML;
-                console.log(text);
+
                 if (text.toLowerCase().includes(filterIngr.toLowerCase())) {
                     item.style.display = ''
                 } else {
@@ -355,13 +383,13 @@ class App {
         // a cahque fois qu'on ecrit a l'intérieur du input ça déclanche notre fonction filterData
         // mainInputSearch.addEventListener('input', filterData)
 
-        // function verifyLength(e) {
+        // // function verifyLength(e) {
 
-        //     if (mainInputSearch.value.length > 2) {
-        //         const searchString = e.target.value.toLowerCase();
-        //         filterData();
-        //     }
-        // }
+        // //     if (mainInputSearch.value.length > 2) {
+        // //         const searchString = e.target.value.toLowerCase();
+        // //         filterData();
+        // //     }
+        // // }
 
         // function filterData(e) {
 
