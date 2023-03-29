@@ -22,35 +22,28 @@ class App {
 
         let figureSection = document.querySelector('.figure-section');
         // liste de tous les ingrédients
-        let arrTag = [];
+        // let arrTag = [];
 
-        function getSpanValue() {
-            const AllTag = document.querySelector('.tag-span-appliance').innerHTML;
-            if (AllTag === 'Blender') {
-                figureSection.innerHTML = "";
+        // function getSpanValue() {
+        //     const AllTag = document.querySelector('.tag-span-appliance').innerHTML;
+        //     if (AllTag === 'Blender') {
+        //         figureSection.innerHTML = "";
 
-                // ce que je suis entrain de chercher dans l'input
-                const searchString = 'Blender';
-                // création d'un tableau avec ma recherche actuelle 
-                const filterArr = recipes.filter(el =>
-                    el.appliance.includes(searchString))
-                console.log(filterArr);
-                createRecipesCard(filterArr)
+        //         // ce que je suis entrain de chercher dans l'input
+        //         const searchString = 'Blender';
+        //         // création d'un tableau avec ma recherche actuelle 
+        //         const filterArr = recipes.filter(el =>
+        //             el.appliance.includes(searchString))
+        //         console.log(filterArr);
+        //         createRecipesCard(filterArr)
 
 
 
-            }
-            // arrTag.forEach(span => {
+        //     }
 
-            //     arrTag.push(span.textContent);
-            // })
-            // console.log(arrTag)
 
-            // // AllTag.push(arrTag);
-            // console.log(AllTag);
-
-        }
-        getSpanValue();
+        // }
+        // getSpanValue();
 
         const ulHtmlList = document.querySelector('.ul-container-list');
         function listOfIngredient() {
@@ -84,13 +77,13 @@ class App {
                             // je recupère la valeur du li sur le quel je viens de cliquer 
                             const text = e.target.innerHTML
                             // je crée mon tag 
-                            const divSpan = document.createElement('div');
-                            divSpan.classList.add('tag-body-ingredient');
-                            divSpan.innerHTML = `
+                            const divSpanIngredient = document.createElement('div');
+                            divSpanIngredient.classList.add('tag-body-ingredient');
+                            divSpanIngredient.innerHTML = `
                                 <span class="tag-span-ingredient">${text}</span>
                                 <img class="cross-tag" src="cross-circle.svg" alt="cross">
                             `
-                            tagSection.appendChild(divSpan);
+                            tagSection.appendChild(divSpanIngredient);
                             // si on a passé cette étape c'est que c'est la premieere fois quon clique sur le li 
                             // notre clicked vaut true maintenant 
                             clicked = true;
@@ -101,12 +94,47 @@ class App {
                                 cross.addEventListener('click', () => {
                                     // lorsque je clique sur la croix elle efface mon tag et reinitialise 
                                     // la variable a false  on va donc pouvoir recliquer dessus
-                                    divSpan.style.display = 'none';
+                                    divSpanIngredient.style.display = 'none';
 
                                     clicked = false;
+                                    figureSection.innerHTML = "";
+                                    createRecipesCard(recipes);
 
                                 })
                             })
+                            function getSpanValue() {
+
+                                if (text) {
+                                    figureSection.innerHTML = "";
+
+                                    const filterArrIngredient = [];
+                                    recipes.map(el => {
+
+                                        if (el.ingredients.some((ingredient) => ingredient.ingredient.toLowerCase() === text)) {
+                                            filterArrIngredient.push(el);
+                                        }
+
+                                    })
+
+
+                                    console.log(filterArrIngredient);
+
+                                    // const filterArr = recipes.map(el =>
+                                    //     el.ingredients.filter(item => item.ingredient.toLowerCase().includes(text))).flatMap(x => x)
+                                    // console.log();
+
+
+                                    createRecipesCard(filterArrIngredient);
+                                    // spanCreate = true;
+
+
+                                }
+
+
+                            }
+
+
+                            getSpanValue();
 
                         }
                         else {
@@ -143,9 +171,11 @@ class App {
 
 
                 allItem.forEach(li => {
-
+                    // pour pas cliquer sur l'item deux fois 
                     let clicked = false;
+                    // let spanCreate = false;
                     li.addEventListener('click', e => {
+
                         if (clicked == false) {
                             // je recupère la valeur du li sur le quel je viens de cliquer 
                             const text = e.target.innerHTML
@@ -153,7 +183,7 @@ class App {
                             const divSpan = document.createElement('div');
                             divSpan.classList.add('tag-body-appliance');
                             divSpan.innerHTML = `
-                                <span class="tag-span-ingredient">${text}</span>
+                                <span class="tag-span-appliance">${text}</span>
                                 <img class="cross-tag" src="cross-circle.svg" alt="cross">
                             `
                             tagSection.appendChild(divSpan);
@@ -169,11 +199,50 @@ class App {
                                     // lorsque je clique sur la croix elle efface mon tag et reinitialise 
                                     // la variable a false  on va donc pouvoir recliquer dessus
                                     divSpan.style.display = 'none';
+                                    // vu qu'on le supprime alors on peut le reinitialiser a false 
                                     clicked = false;
-
+                                    // je vide figure section pour eviter que les createRecipesCard s'accumule c'est a dire 50 + 50 etc 
+                                    figureSection.innerHTML = "";
+                                    // je recrée les 50 recette a chaque fois que je ferme un tag pour revenir a toutes les recettes
+                                    createRecipesCard(recipes);
 
                                 })
                             })
+                            // if (divSpan.indexOf() < 2) {
+                            //     alert('on a atteint le max')
+                            // }
+
+                            // if (spanCreate == false) {
+                            function getSpanValue() {
+                                // const AllTag = document.querySelector('.tag-span-appliance');
+                                // const innerTextOfSpan = AllTag.innerHTML;
+                                // console.log(innerTextOfSpan);
+                                if (text) {
+                                    figureSection.innerHTML = "";
+
+                                    // ce que je suis entrain de chercher dans l'input
+                                    // const searchString = text;
+                                    // création d'un tableau avec ma recherche actuelle 
+                                    const filterArr = recipes.filter(el =>
+                                        el.appliance.toLowerCase().includes(text))
+                                    console.log(filterArr);
+                                    createRecipesCard(filterArr);
+                                    // spanCreate = true;
+
+
+                                }
+
+
+                            }
+
+
+                            getSpanValue();
+                            //     spanCreate = true;
+                            //     console.log(spanCreate)
+                            // }
+                            // else ("vous pouvez selectionner qu'un tag")
+
+                            // getRecipes();
 
                         }
                         else {
@@ -244,6 +313,61 @@ class App {
                                 })
                             })
 
+                            // function getSpanValue() {
+
+                            //     if (text) {
+                            //         figureSection.innerHTML = "";
+
+                            //         const filterArrUstensil = recipes.map(x => x.ustensils.includes(text));
+                            //         console.log(filterArrUstensil);
+                            //         // let list = 0;
+                            //         // list = [...recipes].indexOf(li)
+                            //         // console.log(list);
+
+                            //         // const filterArr = recipes.map(el =>
+                            //         //     el.ingredients.filter(item => item.ingredient.toLowerCase().includes(text))).flatMap(x => x)
+                            //         // console.log();
+
+
+                            //         // createRecipesCard(filterArrUstensil);
+                            //         // spanCreate = true;
+
+
+                            //     }
+
+
+                            // }
+                            function getSpanValue() {
+
+                                if (text) {
+                                    figureSection.innerHTML = "";
+
+                                    const filterArrUstensils = [];
+                                    recipes.map(el => {
+
+                                        if (el.ustensils.some((ustensil) => ustensil.toLowerCase() === text)) {
+                                            filterArrUstensils.push(el);
+                                        }
+
+                                    })
+
+
+                                    console.log(filterArrUstensils);
+
+                                    // const filterArr = recipes.map(el =>
+                                    //     el.ingredients.filter(item => item.ingredient.toLowerCase().includes(text))).flatMap(x => x)
+                                    // console.log();
+
+
+                                    createRecipesCard(filterArrUstensils);
+                                    // spanCreate = true;
+
+
+                                }
+
+
+                            }
+                            getSpanValue()
                         }
                         else {
                             console.log('vous avez déja cliquer sur ce bouton');
@@ -272,19 +396,19 @@ class App {
         let mainInputSearch = document.querySelector('#search-main');
 
         let dataArray;
-        async function getRecipes() {
+        function getRecipes() {
 
 
             createRecipesCard(recipes);
         }
-        // getRecipes();
+        getRecipes();
 
-        console.log(dataRecipes);
+        // console.log(dataRecipes);
 
         function createRecipesCard(listRecipe) {
 
             listRecipe.forEach(recipe => {
-
+                console.log(recipe);
                 const recipeFigure = document.createElement('figure');
                 recipeFigure.classList.add('figure');
                 recipeFigure.innerHTML = ` 
@@ -294,7 +418,7 @@ class App {
                     <span><i class="fa-regular fa-clock me-2"></i>${recipe.time} min</span>
                 </div>
                 <div class="div-describe-p">
-                    <p class="p-ingredients">${recipe.ingredients.map(ingr => ingr.ingredient)} : ${recipe.ingredients.map(quanti => quanti.quantity)}</p>
+                    <p class="p-ingredients">${recipe.ingredients.map(el => el.ingredient)} : ${recipe.ingredients.map(quanti => quanti.quantity)}</p>
                     <p class="p-describe">${recipe.description}</p>
                 </div>
             </figcaption>`
@@ -342,7 +466,7 @@ class App {
 
             allItem.forEach((item) => {
                 let text = item.innerHTML;
-                console.log(text);
+
                 if (text.toLowerCase().includes(filter.toLowerCase())) {
                     item.style.display = ''
                 } else {
