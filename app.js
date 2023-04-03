@@ -296,6 +296,12 @@ class App {
                                 <span class="tag-span-ingredient">${text}</span>
                                 <img class="cross-tag" src="cross-circle.svg" alt="cross">
                             `
+                            let Alltext = [];
+                            while (Alltext < text) {
+
+                                Alltext.unshift(text)
+                            }
+
                             tagSection.appendChild(divSpan);
                             // si on a passé cette étape c'est que c'est la premieere fois quon clique sur le li 
                             // notre clicked vaut true maintenant 
@@ -308,6 +314,9 @@ class App {
                                     // lorsque je clique sur la croix elle efface mon tag et reinitialise 
                                     // la variable a false  on va donc pouvoir recliquer dessus
                                     divSpan.style.display = 'none';
+                                    figureSection.innerHTML = "";
+                                    createRecipesCard(recipes);
+
 
                                     clicked = false;
                                 })
@@ -338,8 +347,15 @@ class App {
 
                             // }
                             function getSpanValue() {
+                                // let Alltext = [];
 
-                                if (text) {
+                                // for (let i = 0; i < text.length; i++) {
+                                //     Alltext.push(text[i])
+                                // }
+
+
+                                if (Alltext) {
+                                    console.log(Alltext);
                                     figureSection.innerHTML = "";
 
                                     const filterArrUstensils = [];
@@ -408,7 +424,7 @@ class App {
         function createRecipesCard(listRecipe) {
 
             listRecipe.forEach(recipe => {
-                console.log(recipe);
+                // console.log(recipe);
                 const recipeFigure = document.createElement('figure');
                 recipeFigure.classList.add('figure');
                 recipeFigure.innerHTML = ` 
@@ -426,6 +442,8 @@ class App {
             })
 
         }
+
+
 
         // Search INGREDIENT 
 
@@ -503,30 +521,66 @@ class App {
 
         }
 
+        function noResult() {
+            const h2NoResult = document.createElement('h2');
+            h2NoResult.innerHTML = "Aucun resultat trouvé pour " + mainInputSearch.value + "!";
+            figureSection.appendChild(h2NoResult)
 
+        }
         // a cahque fois qu'on ecrit a l'intérieur du input ça déclanche notre fonction filterData
-        // mainInputSearch.addEventListener('input', filterData)
+        mainInputSearch.addEventListener('input', filterData)
 
-        // // function verifyLength(e) {
+        // function verifyLength(e) {
 
-        // //     if (mainInputSearch.value.length > 2) {
-        // //         const searchString = e.target.value.toLowerCase();
-        // //         filterData();
-        // //     }
-        // // }
-
-        // function filterData(e) {
-
-        //     figureSection.innerHTML = "";
-        //     // ce que je suis entrain de chercher dans l'input
-        //     const searchString = e.target.value.toLowerCase();
-        //     // création d'un tableau avec ma recherche actuelle 
-        //     const filterArr = recipes.filter(el =>
-        //         el.name.toLowerCase().includes(searchString))
-
-        //     createRecipesCard(filterArr)
-
+        //     if (mainInputSearch.value.length > 2) {
+        //         const searchString = e.target.value.toLowerCase();
+        //         filterData();
+        //     }
         // }
+
+        function filterData(e) {
+
+            if (mainInputSearch.value.length >= 3) {
+
+
+                figureSection.innerHTML = "";
+                // ce que je suis entrain de chercher dans l'input
+                const searchString = e.target.value.toLowerCase();
+                // création d'un tableau avec ma recherche actuelle 
+                const filterArrName = recipes.filter(el =>
+                    el.name.toLowerCase().includes(searchString))
+
+                createRecipesCard(filterArrName);
+                // filtrer par description 
+                const filterArrDescription = recipes.filter(el =>
+                    el.description.toLowerCase().includes(searchString))
+
+                createRecipesCard(filterArrDescription)
+                // filtrer par ingrédients
+                const filterArrIngredient = [];
+                const filterArrayIngredient = recipes.map(el => {
+
+                    if (el.ingredients.some((ingredient) => ingredient.ingredient.toLowerCase() === searchString)) {
+                        filterArrIngredient.push(el);
+
+                    }
+                });
+
+                createRecipesCard(filterArrIngredient)
+                // si la recherche est superieur à 2 carractere alors tu peux verifier si elle fait partie des 3 filtres
+
+                // si la recherche correspond à rien alors tu actives la fonction no result qui affichera aucun resultat trouvé 
+                if (filterArrName && filterArrDescription && filterArrIngredient == false) {
+                    noResult();
+
+                }
+            }
+            else if (mainInputSearch.value.length === 0) {
+
+                figureSection.innerHTML = "";
+                createRecipesCard(recipes)
+            }
+        }
 
 
 
