@@ -525,18 +525,11 @@ class App {
             const h2NoResult = document.createElement('h2');
             h2NoResult.innerHTML = "Aucun resultat trouvé pour " + mainInputSearch.value + "!";
             figureSection.appendChild(h2NoResult)
-
         }
         // a cahque fois qu'on ecrit a l'intérieur du input ça déclanche notre fonction filterData
         mainInputSearch.addEventListener('input', filterData)
 
-        // function verifyLength(e) {
 
-        //     if (mainInputSearch.value.length > 2) {
-        //         const searchString = e.target.value.toLowerCase();
-        //         filterData();
-        //     }
-        // }
 
         function filterData(e) {
 
@@ -570,12 +563,19 @@ class App {
                 // si la recherche est superieur à 2 carractere alors tu peux verifier si elle fait partie des 3 filtres
 
                 // si la recherche correspond à rien alors tu actives la fonction no result qui affichera aucun resultat trouvé 
-                if (filterArrName && filterArrDescription && filterArrIngredient == false) {
-                    noResult();
 
-                }
+                // if (filterArrIngredient == false) {
+                //     noResult()
+                // }
             }
-            else if (mainInputSearch.value.length === 0) {
+            // lorsqu'on trouve rien  message d'erreur apparait 
+            if (figureSection.innerHTML == "") {
+
+                noResult();
+
+            }
+            // lorsque il n'y a plus rien dans l'input recherche 
+            if (mainInputSearch.value.length === 0) {
 
                 figureSection.innerHTML = "";
                 createRecipesCard(recipes)
