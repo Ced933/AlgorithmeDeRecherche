@@ -185,6 +185,7 @@ class App {
                                 value: text,
                                 type: 'Ustensile'
                             });
+
                             let arrType = arrTags.map(x => x.type);
                             if (arrType.includes('Ustensile')) {
                                 // const divSpanUstensil = document.createElement('div');
@@ -195,6 +196,7 @@ class App {
                             `
                                 tagSection.appendChild(divSpan);
                                 clicked = true;
+
                             }
                         }
 
@@ -208,96 +210,64 @@ class App {
                     else {
                         console.log('vous avez déja cliquer sur ce bouton');
                     }
-                    const crosses = document.querySelectorAll('.cross-tag');
 
+                    // ----------------------------------- SUPPRIMER UN TAG ---------------------------------
+
+                    const crosses = document.querySelectorAll('.cross-tag');
                     let i;
                     for (i = 0; i < crosses.length; i++) {
                         crosses[i].onclick = function (e) {
                             // alert();
+                            // le tag actuel 
                             let spanClicked = e.target.parentElement;
+                            // supprimer le tag dans le dom 
                             spanClicked.remove();
                             console.log(spanClicked);
+                            // le mot à l'intérieur du span 
                             let spanInside = spanClicked.querySelector('.tag-span').innerHTML;
                             console.log(spanInside);
-                            arrTags.splice(spanInside, 1);
+                            console.log(arrTags);
+
+                            //    supprimer dans le tableau l'élément qu'on supprime en tag 
+                            arrTags = arrTags.filter((tag) => tag.value.toLowerCase() !== spanInside.toLowerCase())
                             clicked = false;
                             console.log(arrTags);
+
+                            let filterTagMulti = recipes.filter(el => {
+                                // je compare mon tableau avec mes tag selectionné à tous les tableau ustensils de chaque recette 
+                                return arrTags.map(item => item.value).every(i => el.ustensils.includes(i))
+                                // filterArrUstensils.push(el);
+
+                            });
+
+                            console.log(filterTagMulti);
+                            figureSection.innerHTML = "";
+                            createRecipesCard(filterTagMulti);
                         }
                     }
+
+                    let filterTagMulti = recipes.filter(el => {
+                        // je compare mon tableau avec mes tag selectionné à tous les tableau ustensils de chaque recette 
+                        return arrTags.map(item => item.value).every(i => el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
+                        // filterArrUstensils.push(el);
+
+                        // arrTags.map(item => item.value).every(i => el.ustensils.includes(i)) + 
+                    });
+
+                    console.log(filterTagMulti);
+                    figureSection.innerHTML = "";
+                    createRecipesCard(filterTagMulti);
+
                 })
             })
         }
         createTag();
         // return setIngredient;
         // function searchWithTag() {
-        //     let tabTag = [];
-        //     const ingredients = recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x)
-        //     const appliances = recipes.map(item => item.appliance.toLowerCase());
-        //     const ustensils = recipes.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
-        //     // récupère les tags
-        //     let setUstensils = new Set(ustensils);
-        //     let listOfTag = document.querySelectorAll('.tag-span');
-        //     // ou seront stocké les tag 
-        //     // extrait intérieur du tag 
 
-        //     let allNameOfTag = listOfTag.forEach(el => {
-        //         console.log(el);
-        //         let allSpan = document.querySelectorAll('span');
-        //         if (ingredients.includes(el.innerHTML)) {
-
-        //             // allSpan.forEach(x => {
-        //             //     x.classList.add('tag-body-ingredient');
-        //             // })
-
-        //             tabTag.push({
-        //                 value: el.innerHTML,
-        //                 type: 'Ingrédient'
-        //             })
-        //         }
-        //         if (appliances.includes(el.innerHTML)) {
-        //             // allSpan.forEach(x => {
-        //             //     x.classList.add('tag-body-appliance');
-        //             // })
-
-        //             tabTag.push({
-        //                 value: el.innerHTML,
-        //                 type: 'Appareil'
-        //             })
-        //         }
-        //         if (ustensils.includes(el.innerHTML)) {
-
-        //             tabTag.push({
-        //                 value: el.innerHTML,
-        //                 type: 'Ustensile'
-        //             })
-        //         }
-        //         // if (setUstensils.forEach(ust => ust.includes('saladier'))) {
-
-        //         //     tabTag.push({
-        //         //         value: el.innerHTML,
-        //         //         type: 'Ustensile'
-        //         //     })
-        //         // }
-        //     });
-
-        //     let arrType = tabTag.map(x => x.type);
-        //     if (arrType.includes('Ingrédient')) {
-        //         console.log("C'est bien un ingredient")
-        //     }
-
-        //     if (arrType.includes('Appareil')) {
-        //         console.log("c'est bien un Appareil")
-        //     }
-
-        //     if (arrType.includes('Ustensile')) {
-        //         console.log("c'est bien un ustensile")
-        //     }
+        // }
 
 
-        //     console.log(tabTag);
-        //     // if (tabTag.map(x => x.type) === "Ingrédient") {
-        //     //     console.log("c'est bien un ingrédient")
-        //     // }
 
         //     const crosses = document.querySelectorAll('.cross-tag');
 
