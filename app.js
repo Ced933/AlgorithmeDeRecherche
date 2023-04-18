@@ -102,8 +102,67 @@ class App {
 
         listOfUstenciles();
 
+        let mainInputSearch = document.querySelector('#search-main');
+        function noResult() {
+            const h2NoResult = document.createElement('h2');
+            h2NoResult.innerHTML = "Aucun resultat trouvé pour " + mainInputSearch.value + "!";
+            figureSection.appendChild(h2NoResult)
+        }
+        // a cahque fois qu'on ecrit a l'intérieur du input ça déclanche notre fonction filterData
+        mainInputSearch.addEventListener('input', filterData)
 
 
+
+        function filterData(e) {
+
+            if (mainInputSearch.value.length >= 3) {
+
+
+                figureSection.innerHTML = "";
+                // ce que je suis entrain de chercher dans l'input
+                const searchString = e.target.value.toLowerCase();
+                // création d'un tableau avec ma recherche actuelle 
+                let filterArrName = recipes.filter(el =>
+                    el.name.toLowerCase().includes(searchString) || el.description.toLowerCase().includes(searchString) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(searchString))
+                console.log(filterArrName);
+                //    return arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
+
+
+                createRecipesCard(filterArrName);
+                // filtrer par description 
+                // const filterArrDescription = recipes.filter(el =>
+                //     el.description.toLowerCase().includes(searchString))
+
+                // createRecipesCard(filterArrDescription)
+                // filtrer par ingrédients
+                // const filterArrIngredient = [];
+                // const filterArrayIngredient = recipes.map(el => {
+
+                //     if (el.ingredients.some((ingredient) => ingredient.ingredient.toLowerCase() === searchString)) {
+                //         filterArrIngredient.push(el);
+
+                //     }
+                // });
+
+                // createRecipesCard(filterArrIngredient)
+                // si la recherche est superieur à 2 carractere alors tu peux verifier si elle fait partie des 3 filtres
+
+                // si la recherche correspond à rien alors tu actives la fonction no result qui affichera aucun resultat trouvé 
+
+            }
+            // lorsqu'on trouve rien  message d'erreur apparait 
+            if (figureSection.innerHTML == "") {
+
+                noResult();
+
+            }
+            // lorsque il n'y a plus rien dans l'input recherche 
+            if (mainInputSearch.value.length === 0) {
+
+                figureSection.innerHTML = "";
+                createRecipesCard(recipes)
+            }
+        }
 
 
 
@@ -248,9 +307,14 @@ class App {
 
                     let filterTagMulti = recipes.filter(el => {
                         // je compare mon tableau avec mes tag selectionné à tous les tableau ustensils de chaque recette 
-                        return arrTags.map(item => item.value).every(i => el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
+                        // let applianceTag = arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i)).every(i => el.ustensils.includes(i));
+                        // let ingredientTag = arrTags.map(item => item.value).every(i => el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i));
+                        // let ustensilTag = arrTags.map(item => item.value).every(i => el.ustensils.includes(i));
+                        return arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
+
                         // filterArrUstensils.push(el);
 
+                        // el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()) + 
                         // arrTags.map(item => item.value).every(i => el.ustensils.includes(i)) + 
                     });
 
