@@ -134,147 +134,77 @@ class App {
                         const appliances = recipes.map(item => item.appliance.toLowerCase());
                         const ustensils = recipes.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
                         // let increase = 0;
-
+                        const divSpan = document.createElement('div');
                         //                 function creationTag() {
                         //        
+
                         if (ingredients.includes(text)) {
 
                             arrTags.push({
                                 // id: `${++increase}`,
                                 value: text,
                                 type: 'Ingrédient'
-                            })
+                            });
+                            let arrType = arrTags.map(x => x.type);
+                            if (arrType.includes('Ingrédient')) {
+                                divSpan.classList.add('tag-body-ingredient');
+                                // divSpan.setAttribute(id,)
+                                divSpan.innerHTML = `
+                                <span class="tag-span">${text}</span>
+                                <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                            `
+                                tagSection.appendChild(divSpan);
+                                clicked = true;
+                            }
+
                         }
+
                         else if (appliances.includes(text)) {
 
 
                             arrTags.push({
                                 value: text,
                                 type: 'Appareil'
-                            })
+                            });
+                            let arrType = arrTags.map(x => x.type);
+                            if (arrType.includes('Appareil')) {
+                                // const divSpanAppliance = document.createElement('div');
+                                divSpan.classList.add('tag-body-appliance');
+                                divSpan.innerHTML = `
+                                    <span class="tag-span">${text}</span>
+                                    <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                                `
+                                tagSection.appendChild(divSpan);
+                                clicked = true;
+                            }
                         }
+
                         else if (ustensils.includes(text)) {
 
                             arrTags.push({
                                 value: text,
                                 type: 'Ustensile'
-                            })
+                            });
+                            let arrType = arrTags.map(x => x.type);
+                            if (arrType.includes('Ustensile')) {
+                                // const divSpanUstensil = document.createElement('div');
+                                divSpan.classList.add('tag-body-ustensil');
+                                divSpan.innerHTML = `
+                                <span class="tag-span">${text}</span>
+                                <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                            `
+                                tagSection.appendChild(divSpan);
+                                clicked = true;
+                            }
                         }
 
                         console.log(arrTags);
 
 
 
-                        let arrType = arrTags.map(x => x.type);
-                        console.log(arrType);
-
-
-
-                        const divSpan = document.createElement('div');
-                        if (arrType.includes('Ingrédient')) {
-                            divSpan.classList.add('tag-body-ingredient');
-                            // divSpan.setAttribute(id,)
-                            divSpan.innerHTML = `
-                            <span class="tag-span">${text}</span>
-                            <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                        `
-                            tagSection.appendChild(divSpan);
-                        }
-
-                        else if (arrType.includes('Appareil')) {
-                            // const divSpanAppliance = document.createElement('div');
-                            divSpan.classList.add('tag-body-appliance');
-                            divSpan.innerHTML = `
-                                <span class="tag-span">${text}</span>
-                                <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                            `
-                            tagSection.appendChild(divSpan);
-                        }
-
-                        else if (arrType.includes('Ustensile')) {
-                            // const divSpanUstensil = document.createElement('div');
-                            divSpan.classList.add('tag-body-ustensil');
-                            divSpan.innerHTML = `
-                            <span class="tag-span">${text}</span>
-                            <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                        `
-                            tagSection.appendChild(divSpan);
-                        }
-
-
-
-
-
-                        // crosses.forEach(cross => {
-
-                        //     cross.addEventListener('click', (e, index) => {
-                        //         // lorsque je clique sur la croix elle efface mon tag et reinitialise 
-
-                        //         // target l'lement parent de notre croix pour qu'on puisse faire disparaitre  uniquement l'element sur lequel on clique 
-                        //         let spanClicked = e.target.parentElement;
-
-                        //         let spanInside = spanClicked.querySelector('.tag-span').innerHTML;
-                        //         // if(spanInside === )
-                        //         // arrTags.pop();
-                        //         console.log(arrTags.includes('carotte'));
-
-                        //         console.log(spanInside);
-                        //         // console.log(spanClicked);
-                        //         // spanClicked.style.display = 'none';
-                        //         alert();
-                        //         // arrTags.splice(1, 0);
-
-                        //         // arrTags.splice(index, 1);
-
-                        //         // console.log(arrTags);
-                        //         // figureSection.innerHTML = "";
-                        //         // la variable a false  on va donc pouvoir recliquer dessus
-                        //         clicked = false;
-                        //         // createRecipesCard(recipes);
-
-                        //     })
-                        // })
-
-
-
-
-
-
-                        // console.log(tabTag);
-
-                        //                     divSpanIngredient.classList.add('tag-body-ingredient');
-                        // divSpanIngredient.innerHTML = `
-                        //     <span class="tag-span">${text}</span>
-                        //     <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                        // `
-                        // tagSection.appendChild(divSpanIngredient);
-                        //                     // si on a passé cette étape c'est que c'est la premieere fois quon clique sur le li 
-                        //                     // notre clicked vaut true maintenant 
-
-                        //                     const crosses = document.querySelectorAll('.cross-tag');
-
-                        //                     crosses.forEach(cross => {
-
-                        //                         cross.addEventListener('click', () => {
-                        //                             // lorsque je clique sur la croix elle efface mon tag et reinitialise 
-                        //                             // la variable a false  on va donc pouvoir recliquer dessus
-                        //                             divSpanIngredient.style.display = 'none';
-
-                        //                             figureSection.innerHTML = "";
-                        //                             clicked = false;
-                        //                             // createRecipesCard(recipes);
-
-                        //                         })
-                        //                     })
-
-
-                        // }
-                        //                 creationTag();
-                        clicked = true;
-                        // searchWithTag();
-                        //                 // getSpanValue();
-
                     }
+
+
                     else {
                         console.log('vous avez déja cliquer sur ce bouton');
                     }
