@@ -176,7 +176,7 @@ p {
 }
 
 .dropdown {
-    min-height: 70px;
+
     position: relative;
     margin-right: 10px;
     display: flex;

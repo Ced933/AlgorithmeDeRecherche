@@ -60,6 +60,28 @@ class App {
         }
         listOfIngredient();
 
+        const ingredientInputSearch = document.querySelector('#search-ingredient');
+        ingredientInputSearch.addEventListener('input', filterIngredient)
+
+        function filterIngredient() {
+
+            const filterIngr = ingredientInputSearch.value.toLowerCase();
+
+            const allIngredientItem = document.querySelectorAll('.li-ingredient');
+
+
+            allIngredientItem.forEach((item) => {
+                let text = item.innerHTML;
+
+                if (text.toLowerCase().includes(filterIngr.toLowerCase())) {
+                    item.style.display = ''
+                } else {
+                    item.style.display = 'none';
+                }
+            })
+
+        }
+
 
 
         function listOfAppliance() {
@@ -78,6 +100,32 @@ class App {
             const tagSection = document.querySelector('.tag-section');
         }
         listOfAppliance();
+
+
+        // SEARCH Appliance 
+
+        const searchInputAppliance = document.querySelector('#search-appliance');
+        searchInputAppliance.addEventListener("input", filterAppliance)
+
+        function filterAppliance() {
+
+            const filter = searchInputAppliance.value.toLowerCase();
+
+            const allItem = document.querySelectorAll('.li-appliance');
+
+
+            allItem.forEach((item) => {
+                let text = item.innerHTML;
+
+                if (text.toLowerCase().includes(filter.toLowerCase())) {
+                    item.style.display = ''
+                } else {
+                    item.style.display = 'none';
+                }
+            })
+
+        }
+
 
         function listOfUstenciles() {
             const ulHtmlListUstensils = document.querySelector('.ul-container-list-ustensils');
@@ -98,6 +146,31 @@ class App {
         }
 
         listOfUstenciles();
+
+        // SEARCH USTENSILS 
+
+        const searchInputUstensil = document.querySelector('#search-ustensils');
+        searchInputUstensil.addEventListener("input", filterUstensil)
+
+        function filterUstensil() {
+
+            const filterUst = searchInputUstensil.value.toLowerCase();
+
+            const allUstensilsItem = document.querySelectorAll('.li-ustensil');
+
+
+            allUstensilsItem.forEach((item) => {
+                let text = item.innerHTML;
+                console.log(text);
+                if (text.toLowerCase().includes(filterUst.toLowerCase())) {
+                    item.style.display = ''
+                } else {
+                    item.style.display = 'none';
+
+                }
+            })
+
+        }
 
         let mainInputSearch = document.querySelector('#search-main');
         function noResult() {
