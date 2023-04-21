@@ -84,8 +84,8 @@ class App {
 
 
 
+        const ulHtmlListAppliance = document.querySelector('.ul-container-list-appliance');
         function listOfAppliance() {
-            const ulHtmlListAppliance = document.querySelector('.ul-container-list-appliance');
             // Boucle dans une boucle pour pouvoir maper les ingredients 
             const appliances = recipes.map(item => item.appliance.toLowerCase());
             let setAppliance = new Set(appliances);
@@ -127,8 +127,8 @@ class App {
         }
 
 
+        const ulHtmlListUstensils = document.querySelector('.ul-container-list-ustensils');
         function listOfUstenciles() {
-            const ulHtmlListUstensils = document.querySelector('.ul-container-list-ustensils');
             // Boucle dans une boucle pour pouvoir maper les ingredients 
             const ustensils = recipes.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
             // const ustensils = recipes.ustensils.map(item => console.log(item.ustensils));
@@ -329,6 +329,8 @@ class App {
                         // je compare mon tableau avec mes tag selectionné à tous les tableau ustensils de chaque recette 
                         return arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
                     });
+
+
                     if (filterTagMulti.length === 0) {
 
                         // let h2NoResultTag = document.createElement('h3');
@@ -336,6 +338,58 @@ class App {
                         // figureSection.appendChild(h2NoResultTag)
                         console.log("Aucun resultat trouvé");
                     }
+
+
+                    function refreshList() {
+
+                        let newIngredientList = filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
+                        let newAppliance = filterTagMulti.map(item => item.appliance.toLowerCase());
+                        let newUstensil = filterTagMulti.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
+
+                        let setNewLListAppliance = new Set(newAppliance);
+                        let setNewLListIngredient = new Set(newIngredientList);
+                        let setNewLListUstensil = new Set(newUstensil);
+
+                        console.log(setNewLListUstensil);
+                        console.log(setNewLListAppliance);
+                        console.log(setNewLListIngredient);
+
+                        let ingredientItem = "";
+                        // je boucle le Set
+                        setNewLListIngredient.forEach(function (value) {
+                            ingredientItem += '<li class="li-ingredient">' + value + '</li>';
+                        });
+                        // a l'intérieur du ul je mets tous mes li 
+                        ulHtmlList.innerHTML = ingredientItem;
+
+                        let appliancesItem = "";
+
+                        setNewLListAppliance.forEach(function (value) {
+                            appliancesItem += '<li class="li-appliance">' + value + '</li>';
+                        });
+
+                        ulHtmlListAppliance.innerHTML = appliancesItem;
+
+                        let ustensilsItem = "";
+                        setNewLListUstensil.forEach(function (value) {
+                            ustensilsItem += '<li class ="li-ustensil">' + value + '</li>';
+                        });
+
+                        ulHtmlListUstensils.innerHTML = ustensilsItem;
+                        // const newAllItemIngredient = document.querySelectorAll('li-ingredient');
+                        // newAllItemIngredient.forEach(li => {
+                        //     let clicked = false;
+                        //     console.log(li);
+                        //     li.addEventListener('click', e => {
+
+                        //         alert();
+
+                        //     })
+
+                        // })
+                    }
+                    refreshList();
+
                     console.log(filterTagMulti);
                     figureSection.innerHTML = "";
                     createRecipesCard(filterTagMulti);
