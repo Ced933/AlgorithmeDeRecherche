@@ -1,30 +1,20 @@
-// class App {
-//     constructor() {
-//         this.recetteApi = new Api('data/recette.json');
-//         this.sectionRecipe = document.querySelector('.figure-section');
-//         this.sectionInredients = document.querySelector('.container-ul');
-//         this.arrTags = [];
-//     }
+class App {
+    constructor() {
+        this.recetteApi = new Api('data/recette.json');
+        this.sectionRecipe = document.querySelector('.figure-section');
+        this.sectionInredients = document.querySelector('.container-ul');
+        this.arrTags = [];
+    }
 
-//     refresh() {
-//         console.log('ok')
-//     }
-//     async AllRecepie() {
-
-fetch('data/recette.json')
-    .then((res) => res.json())
-    .then(data => {
-
-
-
-
-
+    // refresh() {
+    //     console.log('ok')
+    // }
+    async AllProject() {
         let figureSection = document.querySelector('.figure-section');
-        const dataRecipes = data;
-
+        const dataRecipes = await this.recetteApi.getApi();
         console.log(dataRecipes);
-        const { recipes } = data;
-
+        const { recipes } = await this.recetteApi.getApi();
+        // this.refresh();
         function createRecipesCard(listRecipe) {
             listRecipe.forEach(recipe => {
                 const recipeFigure = document.createElement('figure');
@@ -36,7 +26,7 @@ fetch('data/recette.json')
                     <span><i class="fa-regular fa-clock me-2"></i>${recipe.time} min</span>
                 </div>
                 <div class="div-describe-p">
-
+                
                     <p class="p-ingredients">${recipe.ingredients.map(el => el.ingredient + ":" + el.quantity + "<br>")} </p>
                     <p class="p-describe">${recipe.description}</p>
                 </div>
@@ -46,33 +36,37 @@ fetch('data/recette.json')
         }
         createRecipesCard(recipes);
 
+        let arrTags = [];
 
         const ulHtmlList = document.querySelector('.ul-container-list');
-        function listOfIngredient() {
-            // Boucle dans une boucle pour pouvoir maper les ingredients 
-            // flatMap  sert a desctructurer les tableaux à l'interieur d'un tableau et les meme tous au meme niveau dans un tableau  
+        // Boucle dans une boucle pour pouvoir maper les ingredients 
+        // flatMap  sert a desctructurer les tableaux à l'interieur d'un tableau et les meme tous au meme niveau dans un tableau  
+
+        function listOfIngredients() {
             const ingredients = recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x)
 
-            // je mets ingrédients dans set pour avoir chaque valeur une seul fois 
+            // Je mets ingrédients dans set pour avoir chaque valeur une seul fois 
             let setIngredient = new Set(ingredients);
-            // j'initialise une variable a vide 
-            let ingredientItem = "";
+
             // je boucle le Set
             setIngredient.forEach(function (value) {
-                ingredientItem += '<li class="li-ingredient">' + value + '</li>';
+
+                let liIngredient = document.createElement('li');
+                liIngredient.innerHTML = value;
+                liIngredient.classList.add('li-ingredient');
+                // a l'intérieur du ul je mets tous mes li 
+
+                ulHtmlList.appendChild(liIngredient);
             });
-            // a l'intérieur du ul je mets tous mes li 
-            ulHtmlList.innerHTML = ingredientItem;
-
-
 
         }
-        listOfIngredient();
 
+        listOfIngredients();
+
+
+        // Filtrer avec recherche clavier 
         const ingredientInputSearch = document.querySelector('#search-ingredient');
-        ingredientInputSearch.addEventListener('input', filterIngredient)
-
-        // filtrer avec recherche clavier 
+        ingredientInputSearch.addEventListener('input', filterIngredient);
         function filterIngredient() {
 
             const filterIngr = ingredientInputSearch.value.toLowerCase();
@@ -93,26 +87,26 @@ fetch('data/recette.json')
         }
 
 
-
         const ulHtmlListAppliance = document.querySelector('.ul-container-list-appliance');
-        function listOfAppliance() {
-            // Boucle dans une boucle pour pouvoir maper les ingredients 
+        function listOfAppliances() {
+
             const appliances = recipes.map(item => item.appliance.toLowerCase());
             let setAppliance = new Set(appliances);
-            let appliancesItem = "";
 
             setAppliance.forEach(function (value) {
-                appliancesItem += '<li class="li-appliance">' + value + '</li>';
+                let liAppareil = document.createElement('li');
+                liAppareil.innerHTML = value;
+                liAppareil.classList.add('li-appliance');
+                ulHtmlListAppliance.appendChild(liAppareil);
             });
 
-            ulHtmlListAppliance.innerHTML = appliancesItem;
-            // const allItem = document.querySelectorAll('.li-appliance');
+
             const tagSection = document.querySelector('.tag-section');
         }
-        listOfAppliance();
+        listOfAppliances();
 
 
-        // SEARCH Appliance 
+        // Filtrer Appliance clavier 
 
         const searchInputAppliance = document.querySelector('#search-appliance');
         searchInputAppliance.addEventListener("input", filterAppliance)
@@ -139,25 +133,19 @@ fetch('data/recette.json')
 
         const ulHtmlListUstensils = document.querySelector('.ul-container-list-ustensils');
         function listOfUstenciles() {
-            // Boucle dans une boucle pour pouvoir maper les ingredients 
             const ustensils = recipes.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
-            // const ustensils = recipes.ustensils.map(item => console.log(item.ustensils));
-
             let setUstensils = new Set(ustensils);
-            let ustensilsItem = "";
-
             setUstensils.forEach(function (value) {
-                ustensilsItem += '<li class ="li-ustensil">' + value + '</li>';
+                let liUstensil = document.createElement('li');
+                liUstensil.innerHTML = value;
+                liUstensil.classList.add('li-ustensil');
+                ulHtmlListUstensils.appendChild(liUstensil);
             });
-
-            ulHtmlListUstensils.innerHTML = ustensilsItem;
-            const allItemUstensil = document.querySelectorAll('.li-ustensil');
-            const tagSection = document.querySelector('.tag-section');
         }
 
         listOfUstenciles();
 
-        // SEARCH USTENSILS 
+        // Recherche USTENSILS clavier 
 
         const searchInputUstensil = document.querySelector('#search-ustensils');
         searchInputUstensil.addEventListener("input", filterUstensil)
@@ -218,36 +206,31 @@ fetch('data/recette.json')
                 createRecipesCard(recipes)
             }
         }
-
-
-
-
-        // LES TAGS 
-
+        // permet de cliquer sur les autres tags apres avoir cliqué sur un premier tag 
         const UlContain = document.querySelectorAll('ul');
         UlContain.forEach(ul => {
-            ul.addEventListener('click', (e) => {
+            ul.addEventListener('change', (e) => {
                 createTag();
                 console.log(e)
             })
         });
 
 
-        let arrTags = [];
+
+
         function createTag() {
-            //     // lorsqu'on clique sur un tage on doit pouvoir le faire qu'une seule fois 
-            //     // c'est pour ça qu'on va creer une variable clicked et lui affecter false 
             // const UlContain = document.querySelector('ul');
-            const tagSection = document.querySelector('.tag-section');
             const allItemIngredient = document.querySelectorAll('li');
+            const tagSection = document.querySelector('.tag-section');
 
-            let x;
-            let clicked = false;
-            for (x = 0; x < allItemIngredient.length; x++) {
+
+            for (let x = 0; x < allItemIngredient.length; x++) {
                 allItemIngredient[x].onclick = function (e) {
+
+                    // lorsqu'on clique sur un tag on doit pouvoir le faire qu'une seule fois 
+                    // c'est pour ça qu'on va creer une variable clicked et lui affecter false 
+                    let clicked = false;
                     const text = e.target.innerHTML
-
-
 
                     const ingredients = recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x)
                     const appliances = recipes.map(item => item.appliance.toLowerCase());
@@ -256,146 +239,176 @@ fetch('data/recette.json')
                     const divSpan = document.createElement('div');
                     console.log(arrTags);
                     console.log(text);
+                    function isTextAlreadyExistInArrTag(itemThatWeClickOn) {
+                        //   vérification si l'élément sur lequel on va cliquer existe déja dans arrTag
+                        for (let i = 0; i < arrTags.length; i++) {
+                            if (arrTags[i].value === itemThatWeClickOn) {
+                                console.log('vous avez déja cliqué sur ce tag')
+                                clicked = true;
 
-
-                    // Vérification pour savoir si le tag n'est pas deja dans le tableau 
-                    for (let i = 0; i < arrTags.length; i++) {
-                        if (arrTags[i].value === text) {
-                            console.log('vous avez déja cliqué sur ce tag')
-                            clicked = true;
-
+                            }
                         }
                     }
+                    isTextAlreadyExistInArrTag(text);
 
-                    // if (text === arrTags.indexOf(text)) {
-                    //     alert('tas deja cliqué ici zoba');
-                    // }
+                    // si il existe pas alors on peut le creer  
+
                     if (clicked === false) {
+                        // si ce sur quoi on a cliqué fait parti de la liste de nos ingrédients alors 
+                        // tu exécutes cette fonction ainsi de suite
+                        function isItAnIngredient(text) {
 
+                            if (ingredients.includes(text)) {
+                                arrTags.push({
 
-                        if (ingredients.includes(text)) {
-                            arrTags.push({
+                                    value: text,
+                                    type: 'Ingrédient'
+                                });
+                                // vérifier son type pour lui attribuer une couleur 
+                                let arrType = arrTags.map(x => x.type);
+                                if (arrType.includes('Ingrédient')) {
+                                    divSpan.classList.add('tag-body-ingredient');
 
-                                value: text,
-                                type: 'Ingrédient'
-                            });
-                            let arrType = arrTags.map(x => x.type);
-                            if (arrType.includes('Ingrédient')) {
-                                divSpan.classList.add('tag-body-ingredient');
-
-                                divSpan.innerHTML = `
-                                            <span class="tag-span">${text}</span>
-                                            <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                                        `
-                                tagSection.appendChild(divSpan);
-                                console.log(clicked);
-                            }
-
-
-                        }
-                        else if (appliances.includes(text)) {
-                            arrTags.push({
-                                value: text,
-                                type: 'Appareil'
-                            });
-                            let arrType = arrTags.map(x => x.type);
-                            if (arrType.includes('Appareil')) {
-
-                                divSpan.classList.add('tag-body-appliance');
-                                divSpan.innerHTML = `
+                                    divSpan.innerHTML = `
                                                 <span class="tag-span">${text}</span>
                                                 <img class="cross-tag" src="cross-circle.svg" alt="cross">
                                             `
-                                tagSection.appendChild(divSpan);
-                                console.log(clicked);
-                            }
+                                    tagSection.appendChild(divSpan);
+                                    clicked = true;
+                                    console.log(clicked);
+                                }
 
-                        }
-                        else if (ustensils.includes(text)) {
-
-                            arrTags.push({
-                                value: text,
-                                type: 'Ustensile'
-                            });
-
-                            let arrType = arrTags.map(x => x.type);
-                            if (arrType.includes('Ustensile')) {
-
-                                divSpan.classList.add('tag-body-ustensil');
-                                divSpan.innerHTML = `
-                                            <span class="tag-span">${text}</span>
-                                            <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                                        `
-                                tagSection.appendChild(divSpan);
 
                             }
-
                         }
+                        isItAnIngredient(text);
 
+                        function isItAnAppliance(text) {
 
+                            if (appliances.includes(text)) {
+                                arrTags.push({
+                                    value: text,
+                                    type: 'Appareil'
+                                });
+                                let arrType = arrTags.map(x => x.type);
+                                if (arrType.includes('Appareil')) {
+
+                                    divSpan.classList.add('tag-body-appliance');
+                                    divSpan.innerHTML = `
+                                                   <span class="tag-span">${text}</span>
+                                                   <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                                               `
+                                    tagSection.appendChild(divSpan);
+
+                                    console.log(clicked);
+                                }
+                            }
+                        }
+                        isItAnAppliance(text);
+
+                        function isItAnUstensil(text) {
+                            if (ustensils.includes(text)) {
+
+                                arrTags.push({
+                                    value: text,
+                                    type: 'Ustensile'
+                                });
+
+                                let arrType = arrTags.map(x => x.type);
+                                if (arrType.includes('Ustensile')) {
+
+                                    divSpan.classList.add('tag-body-ustensil');
+                                    divSpan.innerHTML = `
+                                                                      <span class="tag-span">${text}</span>
+                                                                      <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                                                                  `
+                                    tagSection.appendChild(divSpan);
+
+                                }
+
+                            }
+                        }
+                        isItAnUstensil(text);
                     }
-                    // else {
-                    //     console.log('maybach music')
-
-
-                    // }
-
 
 
                     let filterTagMulti = recipes.filter(el => {
-                        //             // je compare mon tableau avec mes tag selectionné à tous les tableau ustensils de chaque recette 
+                        // je compare mon tableau avec mes tag selectionné à tous les tableaux ingrédient ustensils et appliance de chaque recette 
+                        // i c'est tous les élément de arrtag
                         return arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
                     });
 
+                    // test 
+                    // je mets ingrédients dans set pour avoir chaque valeur une seul fois 
+                    //    ------
+                    // let newIngredientList = filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
+                    // let setNewListIngredient = new Set(newIngredientList);
+
+                    // for (let i = 0; i < arrTags.length; ++i) {
+                    //     ulHtmlList.innerHTML = "";
+                    //     listOfIngredients(setNewListIngredient);
+                    //     console.log('The waterrrr');
+
+                    // }
+
+                    // ------------------
 
 
 
-                    function refreshList() {
+                    // FONCTION pour rafraîchir 
 
-                        let newIngredientList = filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
-                        let newAppliance = filterTagMulti.map(item => item.appliance.toLowerCase());
-                        let newUstensil = filterTagMulti.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
 
-                        let setNewLListIngredient = new Set(newIngredientList);
-                        let setNewLListAppliance = new Set(newAppliance);
-                        //             
-                        let setNewLListUstensil = new Set(newUstensil);
+                    // function refreshListIngredient() {
 
-                        //             
-                        //             
+                    //     let newIngredientList = filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
+                    //     let setNewListIngredient = new Set(newIngredientList);
+                    //     ulHtmlList.innerHTML = "";
+                    //     setNewListIngredient.forEach(function (value) {
+                    //         let liIngredient = document.createElement('li');
+                    //         liIngredient.classList.add('li-ingredient');
+                    //         liIngredient.innerHTML = value;
+                    //         ulHtmlList.appendChild(liIngredient);
+                    //     });
+                    // }
+                    // function refreshListAppliance() {
+                    //     let newAppliance = filterTagMulti.map(item => item.appliance.toLowerCase());
+                    //     let setNewListAppliance = new Set(newAppliance);
+                    //     ulHtmlListAppliance.innerHTML = "";
+                    //     setNewListAppliance.forEach(function (value) {
+                    //         let liAppliance = document.createElement('li');
+                    //         liAppliance.classList.add('li-appliance');
+                    //         liAppliance.innerHTML = value;
+                    //         ulHtmlListAppliance.appendChild(liAppliance);
+                    //     });
 
-                        //             console.log(setNewLListUstensil);
-                        //             console.log(setNewLListAppliance);
-                        // console.log(setNewLListIngredient);
+                    // }
+                    // function refreshListUstensil() {
 
-                        let ingredientItem = "";
-                        //             // je boucle le Set
-                        setNewLListIngredient.forEach(function (value) {
-                            ingredientItem += '<li class="li-ingredient">' + value + '</li>';
-                        });
-                        //             // a l'intérieur du ul je mets tous mes li 
-                        ulHtmlList.innerHTML = ingredientItem;
+                    //     let newUstensil = filterTagMulti.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
 
-                        let appliancesItem = "";
+                    //     let setNewListUstensil = new Set(newUstensil);
+                    //     ulHtmlListUstensils.innerHTML = "";
+                    //     setNewListUstensil.forEach(function (value) {
+                    //         let liUstensil = document.createElement('li');
+                    //         liUstensil.classList.add('li-ustensil');
+                    //         liUstensil.innerHTML = value;
+                    //         ulHtmlListUstensils.appendChild(liUstensil);
+                    //     });
+                    // }
+                    // refreshListIngredient();
+                    // refreshListAppliance();
+                    // refreshListUstensil();
 
-                        setNewLListAppliance.forEach(function (value) {
-                            appliancesItem += '<li class="li-appliance">' + value + '</li>';
-                        });
+                    //             // je boucle le Set
+                    //             // a l'intérieur du ul je mets tous mes li 
 
-                        ulHtmlListAppliance.innerHTML = appliancesItem;
 
-                        let ustensilsItem = "";
-                        setNewLListUstensil.forEach(function (value) {
-                            ustensilsItem += '<li class ="li-ustensil">' + value + '</li>';
-                        });
 
-                        ulHtmlListUstensils.innerHTML = ustensilsItem;
 
-                    }
-                    // refreshList();
-                    // console.log(filterTagMulti);
-                    // figureSection.innerHTML = "";
-                    // createRecipesCard(filterTagMulti);
+                    console.log(filterTagMulti);
+                    figureSection.innerHTML = "";
+                    createRecipesCard(filterTagMulti);
+
 
                     // Supprimer un tag 
                     const crosses = document.querySelectorAll('.cross-tag');
@@ -425,61 +438,67 @@ fetch('data/recette.json')
                                 // filterArrUstensils.push(el);
                             });
                             console.log(filterTagMulti);
-                            let newIngredientList = filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
-                            let newAppliance = filterTagMulti.map(item => item.appliance.toLowerCase());
-                            let newUstensil = filterTagMulti.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
-
-                            let setNewLListIngredient = new Set(newIngredientList);
-                            let setNewLListAppliance = new Set(newAppliance);
-                            //             
-                            let setNewLListUstensil = new Set(newUstensil);
 
 
-                            let ingredientItem = "";
-                            //             // je boucle le Set
-                            setNewLListIngredient.forEach(function (value) {
-                                ingredientItem += '<li class="li-ingredient">' + value + '</li>';
-                            });
-                            //             // a l'intérieur du ul je mets tous mes li 
-                            ulHtmlList.innerHTML = ingredientItem;
+                            // function refreshIngredientListClicked() {
+                            //     // on filtre les ingédient restant par rapport au tableau multitag
+                            //     let newIngredientList = filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
+                            //     let setNewListIngredient = new Set(newIngredientList);
 
-                            let appliancesItem = "";
+                            //     ulHtmlList.innerHTML = "";
+                            //     //             // je boucle le Set
+                            //     setNewListIngredient.forEach(function (value) {
+                            //         let liIngredient = document.createElement('li');
+                            //         liIngredient.classList.add('li-ingredient');
+                            //         liIngredient.innerHTML = value;
+                            //         ulHtmlList.appendChild(liIngredient);
+                            //     });
+                            // }
+                            // function refreshApplianceListClicked() {
+                            //     let newAppliance = filterTagMulti.map(item => item.appliance.toLowerCase());
+                            //     let setNewListAppliance = new Set(newAppliance);
+                            //     ulHtmlListAppliance.innerHTML = "";
 
-                            setNewLListAppliance.forEach(function (value) {
-                                appliancesItem += '<li class="li-appliance">' + value + '</li>';
-                            });
+                            //     setNewListAppliance.forEach(function (value) {
+                            //         let liAppliance = document.createElement('li');
+                            //         liAppliance.classList.add('li-appliance');
+                            //         liAppliance.innerHTML = value;
+                            //         ulHtmlListAppliance.appendChild(liAppliance);
+                            //     });
 
-                            ulHtmlListAppliance.innerHTML = appliancesItem;
+                            // }
 
-                            let ustensilsItem = "";
-                            setNewLListUstensil.forEach(function (value) {
-                                ustensilsItem += '<li class ="li-ustensil">' + value + '</li>';
-                            });
+                            // function refreshUstensilListClicked() {
+                            //     let newUstensil = filterTagMulti.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
+                            //     let setNewListUstensil = new Set(newUstensil);
 
-                            ulHtmlListUstensils.innerHTML = ustensilsItem;
+                            //     ulHtmlListUstensils.innerHTML = "";
+                            //     setNewListUstensil.forEach(function (value) {
+                            //         let liUstensil = document.createElement('li');
+                            //         liUstensil.classList.add('li-ustensil');
+                            //         liUstensil.innerHTML = value;
+                            //         ulHtmlListUstensils.appendChild(liUstensil);
+                            //     });
+                            // }
+
+                            // refreshIngredientListClicked();
+                            // refreshApplianceListClicked();
+                            // refreshUstensilListClicked();
+
+
                             figureSection.innerHTML = "";
 
                             createRecipesCard(filterTagMulti);
                         }
-
-
-                        refreshList();
-                        console.log(filterTagMulti);
-                        figureSection.innerHTML = "";
-                        createRecipesCard(filterTagMulti);
-
-
                     }
                 }
             }
         }
         createTag();
-        console.log(data);
-    })
-    .catch(err => console.log('error', err))
 
-//     }
-// }
 
-// const app = new App();
-// app.AllRecepie();
+    }
+}
+
+const app = new App();
+app.AllProject();
