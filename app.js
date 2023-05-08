@@ -238,9 +238,7 @@ class App {
                 tagSection.appendChild(divSpan);
                 // this.clicked = true;
 
-                console.log('les meilleuresssss')
             }
-            console.log('Amen')
         }
     }
 
@@ -434,6 +432,8 @@ class App {
         this.figureSection.innerHTML = "";
 
         this.createRecipesCard(this.filterTagMulti);
+        // pour le bug lorsqu'on suprime tous les élement du tableau 
+        this.createTag();
     }
 
     clickLiEvent(e) {
@@ -510,9 +510,6 @@ class App {
         for (let x = 0; x < allLi.length; x++) {
             allLi[x].addEventListener('click', (e) => {
                 this.clickLiEvent(e);
-                console.log('Big TYMEEEEEEEE')
-                // const crosses = document.querySelectorAll('.cross-tag');
-                // console.log(crosses);
 
 
             });
