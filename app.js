@@ -1,8 +1,10 @@
 class App {
     constructor() {
+
         this.recetteApi = new Api('data/recette.json');
-        this.sectionRecipe = document.querySelector('.figure-section');
+        this.sectionRecipe = document.querySelector('#figure-section');
         this.sectionInredients = document.querySelector('.container-ul');
+        // La ou va etre stocker les tag 
         this.arrTags = [];
         this.ingredients = []
         this.appliances = []
@@ -10,16 +12,16 @@ class App {
         this.arrTags = [];
     }
 
-    // refresh() {
-    //     console.log('ok')
-    // }
+
     async init() {
-        this.figureSection = document.querySelector('.figure-section');
+        this.figureSection = document.querySelector('#figure-section');
         const dataRecipes = await this.recetteApi.getApi();
         console.log(dataRecipes);
-        this.recipes = dataRecipes.recipes
+        this.recipes = dataRecipes.recipes;
         this.createRecipesCard(this.recipes);
         this.listOfIngredients();
+        this.noResult();
+        this.isTextAlreadyExistInArrTag(this.itemThatWeClickOn);
         const ingredientInputSearch = document.querySelector('#search-ingredient');
         this.crosses = document.querySelectorAll('.cross-tag');
         ingredientInputSearch.addEventListener('input', this.filterIngredient);
@@ -31,7 +33,7 @@ class App {
         this.clicked = false;
         this.listOfUstenciles();
         const mainInputSearch = document.querySelector('#search-main');
-        mainInputSearch.addEventListener('input', this.filterData)
+        mainInputSearch.addEventListener('input', (e) => this.filterData(e));
         // permet de cliquer sur les autres tags apres avoir cliqué sur un premier tag 
         const UlContain = document.querySelectorAll('ul');
         UlContain.forEach(ul => {
@@ -41,17 +43,9 @@ class App {
             })
         });
         this.createTag();
-        // console.log(this.crosses);
 
-        // for (let i = 0; i < this.crosses.length; i++) {
-        //     this.crosses[i].addEventListener('click', (e) => {
-        //         console.log(this.crosses[i]);
-
-        //     });
-        //     // console.log(crosses[i]);
-        // }
     }
-    // this.refresh();
+    // CREATION DE LA FIGURE CARTE 
     createRecipesCard(listRecipe) {
         listRecipe.forEach(recipe => {
             const recipeFigure = document.createElement('figure');
@@ -68,25 +62,30 @@ class App {
                     <p class="p-describe">${recipe.description}</p>
                 </div>
             </figcaption>`
-            this.figureSection.appendChild(recipeFigure);
+            const figureSection = document.querySelector('#figure-section');
+            figureSection.appendChild(recipeFigure);
         })
     }
 
+    // LISTE DES INGREDIENTS + RECHERCHE DES INGRÉDIENTS DANS L'INPUT 
+
     listOfIngredients() {
+        // Je boucle tous les ingrédients avec leur doublons  
         const ingredients = this.recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x)
 
-        // Je mets ingrédients dans set pour avoir chaque valeur une seul fois 
+        // Je mets la variable ingrédients dans set pour avoir chaque valeur une seule fois 
         let setIngredient = new Set(ingredients);
 
         const ulHtmlList = document.querySelector('.ul-container-list');
         // je boucle le Set
         setIngredient.forEach((value) => {
-
+            // je cree un li 
             let liIngredient = document.createElement('li');
+            // dans le quel je vais glisser la value qui est un ingrédient unique 
             liIngredient.innerHTML = value;
+            // je lui ajoute une class 
             liIngredient.classList.add('li-ingredient');
-            // a l'intérieur du ul je mets tous mes li 
-
+            // A l'intérieur du ul ingrédient je mets tous mes li 
             ulHtmlList.appendChild(liIngredient);
         });
 
@@ -94,11 +93,11 @@ class App {
 
     filterIngredient() {
         const ingredientInputSearch = document.querySelector('#search-ingredient');
+        // La valeur qu'est en train d'entrer l'utilisateur dans l'input de recherche 
         const filterIngr = ingredientInputSearch.value.toLowerCase();
         console.log(filterIngr);
         const allIngredientItem = document.querySelectorAll('.li-ingredient');
-
-
+        // pour chaque item (li) on gardera uniquement ceux qui correspondent à ce que tape l'utilisateur, les autres seront supprimés
         allIngredientItem.forEach((item) => {
             let text = item.innerHTML;
 
@@ -111,7 +110,7 @@ class App {
 
     }
 
-
+    // LISTE DES APPAREILS + RECHERCHE DES APPAREILS DANS L'INPUT 
     listOfAppliances() {
 
         const ulHtmlListAppliance = document.querySelector('.ul-container-list-appliance');
@@ -149,7 +148,7 @@ class App {
 
     }
 
-
+    // LISTE DES USTENSILES + RECHERCHE DES USTENSILES DANS L'INPUT 
     listOfUstenciles() {
         const ulHtmlListUstensils = document.querySelector('.ul-container-list-ustensils');
         const ustensils = this.recipes.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
@@ -182,46 +181,51 @@ class App {
 
     }
 
+    // RECHERCHE DANS LA BARRE PRINCIPALE 
+
     noResult() {
+        // En cas de non recherche trouvé 
         let mainInputSearch = document.querySelector('#search-main');
         const h2NoResult = document.createElement('h2');
         h2NoResult.innerHTML = "Aucun resultat trouvé pour " + mainInputSearch.value + "!";
         this.figureSection.appendChild(h2NoResult)
     }
 
+    // À chaque fois que l'utilisateur tape une lettre dans la barre de recherche cette fonction est appelée 
     filterData(e) {
+        this.figureSection = document.querySelector('#figure-section');
+        let mainInputSearch = document.querySelector('#search-main');
+        // Au bout de trois caractères la recherche se lance
         if (mainInputSearch.value.length >= 3) {
             this.figureSection.innerHTML = "";
-            // ce que je suis entrain de chercher dans l'input
+            // Ce que l'utilisateur est en train de chercher dans l'input
             const searchString = e.target.value.toLowerCase();
-            // création d'un tableau avec ma recherche actuelle 
-            let filterArrName = this.recipes.filter(el =>
-                el.name.toLowerCase().includes(searchString) || el.description.toLowerCase().includes(searchString) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(searchString))
-            console.log(filterArrName);
-            this.createRecipesCard(filterArrName);
-            // si la recherche est superieur à 2 carractere alors tu peux verifier si elle fait partie des 3 filtres
-            // si la recherche correspond à rien alors tu actives la fonction no result qui affichera aucun resultat trouvé 
+            // Création d'un tableau avec ma recherche actuelle 
+            // Ce tableau retournera toutes les recettes correspondantes à tout ce que l'utilisateur est en train de taper en fonction des trois filtres qu'on a défini
+            this.filterArrNameDescriptionIngredient = this.recipes.filter(el => {
+                return el.name.toLowerCase().includes(searchString) || el.description.toLowerCase().includes(searchString) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(searchString)
+            })
+            // Les cartes sont redéfini avec le nouveau filtre 
+            this.createRecipesCard(this.filterArrNameDescriptionIngredient);
 
         }
-        // lorsqu'on trouve rien  message d'erreur apparait 
-        if (figureSection.innerHTML == "") {
 
+        // Lorsqu'on trouve rien  message d'erreur apparaît 
+        if (this.figureSection.innerHTML == "") {
             this.noResult();
-
         }
-        // lorsque il n'y a plus rien dans l'input recherche 
-        if (mainInputSearch.value.length === 0) {
 
-            figureSection.innerHTML = "";
-            this.createRecipesCard(recipes)
+        // lorsque il n'y a plus rien dans l'input recherche on le réinitialise avec toutes les recettes du début
+        if (mainInputSearch.value.length === 0) {
+            this.figureSection.innerHTML = "";
+            this.createRecipesCard(this.recipes)
         }
     }
 
     isItAnIngredient(text) {
-
+        // Si le li sur le quelle on a cliqué se trouve dans ingrédients alors on le push dans arrTag avec le tag de la bonne couleur  
         if (this.ingredients.includes(text)) {
             this.arrTags.push({
-
                 value: text,
                 type: 'Ingrédient'
             });
@@ -232,12 +236,10 @@ class App {
                 const tagSection = document.querySelector('.tag-section');
                 divSpan.classList.add('tag-body-ingredient');
                 divSpan.innerHTML = `
-                                <span class="tag-span">${text}</span>
-                                <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                            `
+                        <span class="tag-span">${text}</span>
+                        <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                    `
                 tagSection.appendChild(divSpan);
-                // this.clicked = true;
-
             }
         }
     }
@@ -255,12 +257,10 @@ class App {
                 const tagSection = document.querySelector('.tag-section');
                 divSpan.classList.add('tag-body-appliance');
                 divSpan.innerHTML = `
-                                   <span class="tag-span">${text}</span>
-                                   <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                               `
+                        <span class="tag-span">${text}</span>
+                        <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                    `
                 tagSection.appendChild(divSpan);
-
-                console.log(this.clicked);
             }
         }
     }
@@ -268,33 +268,27 @@ class App {
     isItAnUstensil(text) {
 
         if (this.ustensils.includes(text)) {
-
             this.arrTags.push({
                 value: text,
                 type: 'Ustensile'
             });
-
-
             let arrType = this.arrTags.map(x => x.type);
             if (arrType.includes('Ustensile')) {
-
                 const divSpan = document.createElement('div');
                 const tagSection = document.querySelector('.tag-section');
 
                 divSpan.classList.add('tag-body-ustensil');
                 divSpan.innerHTML = `
-                                                      <span class="tag-span">${text}</span>
-                                                      <img class="cross-tag" src="cross-circle.svg" alt="cross">
-                                                  `
+                        <span class="tag-span">${text}</span>
+                        <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                    `
                 tagSection.appendChild(divSpan);
-
             }
-
         }
     }
 
+    // Cette fonction nous sert à actualiser les listes après avoir cliqué sur un li 
     refreshListIngredient() {
-
         let newIngredientList = this.filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
         let setNewListIngredient = new Set(newIngredientList);
         const ulHtmlList = document.querySelector('.ul-container-list');
@@ -303,10 +297,10 @@ class App {
             let liIngredient = document.createElement('li');
             liIngredient.classList.add('li-ingredient');
             liIngredient.innerHTML = value;
-            // liIngredient.addEventListener('click', (e) => this.isItAnIngredient(e.target.textContent))
             ulHtmlList.appendChild(liIngredient);
         });
     }
+
     refreshListAppliance() {
         let newAppliance = this.filterTagMulti.map(item => item.appliance.toLowerCase());
         const ulHtmlListAppliance = document.querySelector('.ul-container-list-appliance');
@@ -318,13 +312,11 @@ class App {
             liAppliance.innerHTML = value;
             ulHtmlListAppliance.appendChild(liAppliance);
         });
-
     }
-    refreshListUstensil() {
 
+    refreshListUstensil() {
         const ulHtmlListUstensils = document.querySelector('.ul-container-list-ustensils');
         let newUstensil = this.filterTagMulti.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
-
         let setNewListUstensil = new Set(newUstensil);
         ulHtmlListUstensils.innerHTML = "";
         setNewListUstensil.forEach((value) => {
@@ -335,10 +327,8 @@ class App {
         });
     }
 
-
-
-
-
+    // -------------------------------
+    // Ces fonctions va être acvité lorsqu'on va supprimer un tag 
     refreshIngredientListClicked() {
         // on filtre les ingédient restant par rapport au tableau multitag
         let newIngredientList = this.filterTagMulti.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
@@ -384,7 +374,7 @@ class App {
         });
     }
 
-
+    // Éviter que l'utilisateur ne clique deux fois sur le même tag
     isTextAlreadyExistInArrTag(itemThatWeClickOn) {
         //   vérification si l'élément sur lequel on va cliquer existe déja dans arrTag
         for (let i = 0; i < this.arrTags.length; i++) {
@@ -396,34 +386,27 @@ class App {
         }
     }
 
-
+    // la fonction qui va être appelé lorsqu'on va cliquer sur la croix d'un tag 
     clickCross(e) {
+        // notre tag est égale à true alors vu qu'on le supprimer on lui redonne sa valeur initiale, false 
         this.clicked = false;
-        console.log('spanClicked ', e.target.parentElement);
         // le tag actuel 
         let spanClicked = e.target.parentElement;
         // supprimer le tag dans le dom 
         spanClicked.remove();
-        // spanClicked.style.display = "none";
-        console.log(spanClicked);
-        // le mot à l'intérieur du span 
+
+        // // le mot à l'intérieur du span 
         let spanInside = spanClicked.querySelector('.tag-span').innerHTML;
-        console.log(spanInside);
-        console.log(this.arrTags);
-
-        //    supprimer dans le tableau l'élément qu'on supprime en tag 
+        // Supprimer dans le tableau l'élément qu'on supprime en tag 
         this.arrTags = this.arrTags.filter((tag) => tag.value.toLowerCase() !== spanInside.toLowerCase())
-        // clicked = false;
-        console.log(this.arrTags);
 
+        // On réactualise les élements de notre this.filterTagMulti sans l'élément qu'on vient de supprimer 
         this.filterTagMulti = this.recipes.filter(el => {
-            // je compare mon tableau avec mes tag selectionné à tous les tableau ustensils de chaque recette 
             return this.arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
-            // filterArrUstensils.push(el);
+
         });
-        console.log(this.filterTagMulti);
 
-
+        // Chaque liste est actualisé 
         this.refreshIngredientListClicked();
         this.refreshApplianceListClicked();
         this.refreshUstensilListClicked();
@@ -432,86 +415,69 @@ class App {
         this.figureSection.innerHTML = "";
 
         this.createRecipesCard(this.filterTagMulti);
-        // pour le bug lorsqu'on suprime tous les élement du tableau 
+
+
         this.createTag();
     }
 
+    // Cette fonction va être déclanché à chaque clique sur un li 
     clickLiEvent(e) {
-
-        // lorsqu'on clique sur un tag on doit pouvoir le faire qu'une seule fois 
-        // c'est pour ça qu'on va creer une variable clicked et lui affecter false 
-        let clicked = false;
+        // On initialise clicked à false si on le fait pas les élements peuvent être affecté par true 
+        this.clicked = false;
         const text = e.target.innerHTML
 
         this.ingredients = this.recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x)
         this.appliances = this.recipes.map(item => item.appliance.toLowerCase());
         this.ustensils = this.recipes.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
 
-        console.log(this.arrTags);
-        console.log(text);
+        // on vérifie si le tag n'a pas déjà été cliqué si oui on lui affect true et il ne retrera pas dans notre condition
         this.isTextAlreadyExistInArrTag(text);
 
-        // si il existe pas alors on peut le creer  
 
-        if (clicked === false) {
-            // si ce sur quoi on a cliqué fait parti de la liste de nos ingrédients alors 
-            // tu exécutes cette fonction ainsi de suite
+
+        // Lorsqu'on clique sur un tag on doit pouvoir le faire qu'une seule fois 
+        // si c'est la 1er fois qu'on clique sur notre li alors il rentre dans notre condition 
+        if (this.clicked === false) {
 
             this.isItAnIngredient(text);
-
             this.isItAnAppliance(text);
             this.isItAnUstensil(text);
+
         }
 
 
         this.filterTagMulti = this.recipes.filter(el => {
             // je compare mon tableau avec mes tag selectionné à tous les tableaux ingrédient ustensils et appliance de chaque recette 
-            // i c'est tous les élément de arrtag
+            // i c'est tous les éléments de arrtag
             return this.arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
         });
 
-        // test 
-
-
-
-        // FONCTION pour rafraîchir 
-
+        // FONCTION pour rafraîchir les listes
 
         this.refreshListIngredient();
         this.refreshListAppliance();
         this.refreshListUstensil();
 
-        //             // je boucle le Set
-        //             // a l'intérieur du ul je mets tous mes li 
-
-        console.log(this.filterTagMulti);
         this.figureSection.innerHTML = "";
         this.createRecipesCard(this.filterTagMulti);
 
 
-        // Supprimer un tag 
         this.crosses = document.querySelectorAll('.cross-tag');
         console.log(this.crosses);
-        // this.clickCross(e)
         for (let i = 0; i < this.crosses.length; i++) {
             this.crosses[i].addEventListener('click', (e) => {
                 this.clickCross(e)
-
             });
-            // console.log(crosses[i]);
         }
     }
 
     createTag() {
-        // const UlContain = document.querySelector('ul');
-        const allLi = document.querySelectorAll('li');
 
+        const allLi = document.querySelectorAll('li');
 
         for (let x = 0; x < allLi.length; x++) {
             allLi[x].addEventListener('click', (e) => {
                 this.clickLiEvent(e);
-
-
             });
         }
     }
