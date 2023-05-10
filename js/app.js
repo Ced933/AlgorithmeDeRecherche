@@ -4,7 +4,7 @@ class App {
         this.recetteApi = new Api('data/recette.json');
         this.sectionRecipe = document.querySelector('#figure-section');
         this.sectionInredients = document.querySelector('.container-ul');
-        // La ou va etre stocker les tag 
+        // La où va être stocké les tag 
         this.arrTags = [];
         this.ingredients = []
         this.appliances = []
@@ -16,7 +16,6 @@ class App {
     async init() {
         this.figureSection = document.querySelector('#figure-section');
         const dataRecipes = await this.recetteApi.getApi();
-        console.log(dataRecipes);
         this.recipes = dataRecipes.recipes;
         this.createRecipesCard(this.recipes);
         this.listOfIngredients();
@@ -39,7 +38,6 @@ class App {
         UlContain.forEach(ul => {
             ul.addEventListener('click', (e) => {
                 this.createTag();
-                console.log(e)
             })
         });
         this.createTag();
@@ -50,6 +48,7 @@ class App {
         listRecipe.forEach(recipe => {
             const recipeFigure = document.createElement('figure');
             recipeFigure.classList.add('figure');
+
             recipeFigure.innerHTML = ` 
                 <figcaption class="figcaption">
                 <div class="div-title-span">
@@ -58,10 +57,11 @@ class App {
                 </div>
                 <div class="div-describe-p">
                 
-                    <p class="p-ingredients">${recipe.ingredients.map(el => el.ingredient + ":" + el.quantity + "<br>")} </p>
+                    <p class="p-ingredients">${recipe.ingredients.map(el => (el.ingredient === undefined ? "" : el.ingredient) + " : " + (el.quantity === undefined ? "" : el.quantity) + (el.unit === undefined ? "" : el.unit) + "<br>")} </p>
                     <p class="p-describe">${recipe.description}</p>
                 </div>
             </figcaption>`
+            //Dans certains array il y a des undefined alors pour eviter qu'ils s'affichent on va les supprimer en les remplaçant par des espaces exemple: (el.ingredient === undefined ? "" : el.ingredient)
             const figureSection = document.querySelector('#figure-section');
             figureSection.appendChild(recipeFigure);
         })
@@ -95,7 +95,6 @@ class App {
         const ingredientInputSearch = document.querySelector('#search-ingredient');
         // La valeur qu'est en train d'entrer l'utilisateur dans l'input de recherche 
         const filterIngr = ingredientInputSearch.value.toLowerCase();
-        console.log(filterIngr);
         const allIngredientItem = document.querySelectorAll('.li-ingredient');
         // pour chaque item (li) on gardera uniquement ceux qui correspondent à ce que tape l'utilisateur, les autres seront supprimés
         allIngredientItem.forEach((item) => {
@@ -170,7 +169,6 @@ class App {
 
         allUstensilsItem.forEach((item) => {
             let text = item.innerHTML;
-            console.log(text);
             if (text.toLowerCase().includes(filterUst.toLowerCase())) {
                 item.style.display = ''
             } else {
@@ -237,7 +235,7 @@ class App {
                 divSpan.classList.add('tag-body-ingredient');
                 divSpan.innerHTML = `
                         <span class="tag-span">${text}</span>
-                        <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                        <img class="cross-tag" src="assets/cross-circle.svg" alt="cross">
                     `
                 tagSection.appendChild(divSpan);
             }
@@ -258,7 +256,7 @@ class App {
                 divSpan.classList.add('tag-body-appliance');
                 divSpan.innerHTML = `
                         <span class="tag-span">${text}</span>
-                        <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                        <img class="cross-tag" src="assets/cross-circle.svg" alt="cross">
                     `
                 tagSection.appendChild(divSpan);
             }
@@ -280,7 +278,7 @@ class App {
                 divSpan.classList.add('tag-body-ustensil');
                 divSpan.innerHTML = `
                         <span class="tag-span">${text}</span>
-                        <img class="cross-tag" src="cross-circle.svg" alt="cross">
+                        <img class="cross-tag" src="assets/cross-circle.svg" alt="cross">
                     `
                 tagSection.appendChild(divSpan);
             }
@@ -380,8 +378,8 @@ class App {
         for (let i = 0; i < this.arrTags.length; i++) {
             if (this.arrTags[i].value === itemThatWeClickOn) {
                 console.log('vous avez déja cliqué sur ce tag')
+                // on donne true car il existe déjà dans notre tableau
                 this.clicked = true;
-
             }
         }
     }
@@ -463,7 +461,6 @@ class App {
 
 
         this.crosses = document.querySelectorAll('.cross-tag');
-        console.log(this.crosses);
         for (let i = 0; i < this.crosses.length; i++) {
             this.crosses[i].addEventListener('click', (e) => {
                 this.clickCross(e)

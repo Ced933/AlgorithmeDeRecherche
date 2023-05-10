@@ -35,4 +35,3 @@ selectUstensils.addEventListener('click', () => {
 
 // search input 
 const searchInputIngredient = document.querySelector('#search-ingredient');
-console.log(searchInputIngredient.value);
