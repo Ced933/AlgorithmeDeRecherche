@@ -56,8 +56,8 @@ class App {
                     <span><i class="fa-regular fa-clock me-2"></i>${recipe.time} min</span>
                 </div>
                 <div class="div-describe-p">
-                
-                    <p class="p-ingredients">${recipe.ingredients.map(el => (el.ingredient === undefined ? "" : el.ingredient) + " : " + (el.quantity === undefined ? "" : el.quantity) + (el.unit === undefined ? "" : el.unit) + "<br>")} </p>
+                <p class="p-ingredients">${recipe.ingredients.map(el => (el.ingredient === undefined ? "" : el.ingredient) + " : " + (el.quantity === undefined ? "" : el.quantity) + (el.unit === undefined ? "" : el.unit) + "<br>")} </p>
+
                     <p class="p-describe">${recipe.description}</p>
                 </div>
             </figcaption>`
@@ -199,12 +199,22 @@ class App {
             // Ce que l'utilisateur est en train de chercher dans l'input
             const searchString = e.target.value.toLowerCase();
             // Création d'un tableau avec ma recherche actuelle 
-            // Ce tableau retournera toutes les recettes correspondantes à tout ce que l'utilisateur est en train de taper en fonction des trois filtres qu'on a défini
-            this.filterArrNameDescriptionIngredient = this.recipes.filter(el => {
-                return el.name.toLowerCase().includes(searchString) || el.description.toLowerCase().includes(searchString) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(searchString)
-            })
-            // Les cartes sont redéfini avec le nouveau filtre 
-            this.createRecipesCard(this.filterArrNameDescriptionIngredient);
+
+            //   initialiser un tableau vide 
+            let filterForArrNameDescriptionIngredient = [];
+
+
+            for (let i = 0; i < this.recipes.length; i++) {
+                let nameRecipes = this.recipes[i];
+
+                if (nameRecipes.name.toLowerCase().includes(searchString) || nameRecipes.description.toLowerCase().includes(searchString) || nameRecipes.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(searchString)) {
+                    //   On va garder uniquement les recettes qui remplissent nos conditions et les pusher dans nôtre tableau vide 
+                    filterForArrNameDescriptionIngredient.push(nameRecipes);
+                }
+
+            }
+            // Grâce à notre tableau on va pouvoir créer les cartes 
+            this.createRecipesCard(filterForArrNameDescriptionIngredient);
 
         }
 
@@ -392,7 +402,6 @@ class App {
         let spanClicked = e.target.parentElement;
         // supprimer le tag dans le dom 
         spanClicked.remove();
-
         // // le mot à l'intérieur du span 
         let spanInside = spanClicked.querySelector('.tag-span').innerHTML;
         // Supprimer dans le tableau l'élément qu'on supprime en tag 
@@ -401,7 +410,6 @@ class App {
         // On réactualise les élements de notre this.filterTagMulti sans l'élément qu'on vient de supprimer 
         this.filterTagMulti = this.recipes.filter(el => {
             return this.arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
-
         });
 
         // Chaque liste est actualisé 
