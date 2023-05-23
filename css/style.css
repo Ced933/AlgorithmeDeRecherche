@@ -11,7 +11,6 @@ body {
 
 .main {
     width: 90%;
-    /* border: 1px solid #000; */
 }
 
 header {
@@ -30,7 +29,6 @@ header {
 }
 
 .input {
-
     background-color: #E7E7E7;
     width: 90%;
     border: transparent;
@@ -95,12 +93,9 @@ header {
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
     grid-auto-rows: minmax(50px, auto);
-
-
 }
 
 .figure {
-    /* border: 1px solid #000; */
     width: 350px;
     height: 350px;
     padding: 0;
@@ -114,7 +109,6 @@ header {
     position: absolute;
     background-color: #E7E7E7;
     height: 175px;
-
     bottom: 0;
     border-radius: 0 0 5px 5px;
     padding: 15px;
@@ -176,12 +170,10 @@ p {
 }
 
 .dropdown {
-
     position: relative;
     margin-right: 10px;
     display: flex;
     align-items: center;
-
 }
 
 .li-ingredient {
@@ -194,7 +186,6 @@ p {
 
 .div-select {
     display: flex;
-
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -272,8 +263,6 @@ p {
     background: #68D9A4;
     color: #fff;
     display: flex;
-    /* justify-content: space-between; */
-    /* align-items: center; */
     border: 2px solid #68D9A4;
     box-shadow: 1px 1px 5px #fff;
     border-radius: 8px;
@@ -297,7 +286,6 @@ p {
     margin: 0;
     list-style: none;
     display: none;
-
 }
 
 .input-selected-ustensils {
@@ -313,9 +301,6 @@ p {
     background: #ED6454;
     color: #fff;
     display: flex;
-    /* justify-content: space-between;
-    align-items: center; */
-
     box-shadow: 1px 1px 5px #fff;
     border: 2px solid #ED6454;
     border-radius: 8px;
@@ -336,9 +321,6 @@ p {
 .caret-rotate {
     transform: rotate(180deg);
 }
-
-
-
 
 .menu-open {
     display: block;

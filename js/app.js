@@ -6,9 +6,9 @@ class App {
         this.sectionInredients = document.querySelector('.container-ul');
         // La où va être stocké les tag 
         this.arrTags = [];
-        this.ingredients = []
-        this.appliances = []
-        this.ustensils = []
+        this.ingredients = [];
+        this.appliances = [];
+        this.ustensils = [];
         this.arrTags = [];
     }
 
@@ -26,9 +26,9 @@ class App {
         ingredientInputSearch.addEventListener('input', this.filterIngredient);
         this.listOfAppliances();
         const searchInputAppliance = document.querySelector('#search-appliance');
-        searchInputAppliance.addEventListener("input", this.filterAppliance)
+        searchInputAppliance.addEventListener("input", this.filterAppliance);
         const searchInputUstensil = document.querySelector('#search-ustensils');
-        searchInputUstensil.addEventListener("input", this.filterUstensil)
+        searchInputUstensil.addEventListener("input", this.filterUstensil);
         this.clicked = false;
         this.listOfUstenciles();
         const mainInputSearch = document.querySelector('#search-main');
@@ -38,7 +38,7 @@ class App {
         UlContain.forEach(ul => {
             ul.addEventListener('click', (e) => {
                 this.createTag();
-            })
+            });
         });
         this.createTag();
 
@@ -60,18 +60,18 @@ class App {
 
                     <p class="p-describe">${recipe.description}</p>
                 </div>
-            </figcaption>`
+            </figcaption>`;
             //Dans certains array il y a des undefined alors pour eviter qu'ils s'affichent on va les supprimer en les remplaçant par des espaces exemple: (el.ingredient === undefined ? "" : el.ingredient)
             const figureSection = document.querySelector('#figure-section');
             figureSection.appendChild(recipeFigure);
-        })
+        });
     }
 
     // LISTE DES INGREDIENTS + RECHERCHE DES INGRÉDIENTS DANS L'INPUT 
 
     listOfIngredients() {
         // Je boucle tous les ingrédients avec leur doublons  
-        const ingredients = this.recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x)
+        const ingredients = this.recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
 
         // Je mets la variable ingrédients dans set pour avoir chaque valeur une seule fois 
         let setIngredient = new Set(ingredients);
@@ -101,11 +101,11 @@ class App {
             let text = item.innerHTML;
 
             if (text.toLowerCase().includes(filterIngr.toLowerCase())) {
-                item.style.display = ''
+                item.style.display = '';
             } else {
                 item.style.display = 'none';
             }
-        })
+        });
 
     }
 
@@ -139,11 +139,11 @@ class App {
             let text = item.innerHTML;
 
             if (text.toLowerCase().includes(filter.toLowerCase())) {
-                item.style.display = ''
+                item.style.display = '';
             } else {
                 item.style.display = 'none';
             }
-        })
+        });
 
     }
 
@@ -170,12 +170,12 @@ class App {
         allUstensilsItem.forEach((item) => {
             let text = item.innerHTML;
             if (text.toLowerCase().includes(filterUst.toLowerCase())) {
-                item.style.display = ''
+                item.style.display = '';
             } else {
                 item.style.display = 'none';
 
             }
-        })
+        });
 
     }
 
@@ -186,7 +186,7 @@ class App {
         let mainInputSearch = document.querySelector('#search-main');
         const h2NoResult = document.createElement('h2');
         h2NoResult.innerHTML = "Aucun resultat trouvé pour " + mainInputSearch.value + "!";
-        this.figureSection.appendChild(h2NoResult)
+        this.figureSection.appendChild(h2NoResult);
     }
 
     // À chaque fois que l'utilisateur tape une lettre dans la barre de recherche cette fonction est appelée 
@@ -226,7 +226,7 @@ class App {
         // lorsque il n'y a plus rien dans l'input recherche on le réinitialise avec toutes les recettes du début
         if (mainInputSearch.value.length === 0) {
             this.figureSection.innerHTML = "";
-            this.createRecipesCard(this.recipes)
+            this.createRecipesCard(this.recipes);
         }
     }
 
@@ -246,7 +246,7 @@ class App {
                 divSpan.innerHTML = `
                         <span class="tag-span">${text}</span>
                         <img class="cross-tag" src="assets/cross-circle.svg" alt="cross">
-                    `
+                    `;
                 tagSection.appendChild(divSpan);
             }
         }
@@ -267,7 +267,7 @@ class App {
                 divSpan.innerHTML = `
                         <span class="tag-span">${text}</span>
                         <img class="cross-tag" src="assets/cross-circle.svg" alt="cross">
-                    `
+                    `;
                 tagSection.appendChild(divSpan);
             }
         }
@@ -289,7 +289,7 @@ class App {
                 divSpan.innerHTML = `
                         <span class="tag-span">${text}</span>
                         <img class="cross-tag" src="assets/cross-circle.svg" alt="cross">
-                    `
+                    `;
                 tagSection.appendChild(divSpan);
             }
         }
@@ -387,7 +387,7 @@ class App {
         //   vérification si l'élément sur lequel on va cliquer existe déja dans arrTag
         for (let i = 0; i < this.arrTags.length; i++) {
             if (this.arrTags[i].value === itemThatWeClickOn) {
-                console.log('vous avez déja cliqué sur ce tag')
+                console.log('vous avez déja cliqué sur ce tag');
                 // on donne true car il existe déjà dans notre tableau
                 this.clicked = true;
             }
@@ -405,11 +405,11 @@ class App {
         // // le mot à l'intérieur du span 
         let spanInside = spanClicked.querySelector('.tag-span').innerHTML;
         // Supprimer dans le tableau l'élément qu'on supprime en tag 
-        this.arrTags = this.arrTags.filter((tag) => tag.value.toLowerCase() !== spanInside.toLowerCase())
+        this.arrTags = this.arrTags.filter((tag) => tag.value.toLowerCase() !== spanInside.toLowerCase());
 
         // On réactualise les élements de notre this.filterTagMulti sans l'élément qu'on vient de supprimer 
         this.filterTagMulti = this.recipes.filter(el => {
-            return this.arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
+            return this.arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i));
         });
 
         // Chaque liste est actualisé 
@@ -430,9 +430,9 @@ class App {
     clickLiEvent(e) {
         // On initialise clicked à false si on le fait pas les élements peuvent être affecté par true 
         this.clicked = false;
-        const text = e.target.innerHTML
+        const text = e.target.innerHTML;
 
-        this.ingredients = this.recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x)
+        this.ingredients = this.recipes.map(item => item.ingredients.map(ingredient => ingredient.ingredient.toLowerCase())).flatMap(x => x);
         this.appliances = this.recipes.map(item => item.appliance.toLowerCase());
         this.ustensils = this.recipes.map(item => item.ustensils.map(item2 => item2.toLowerCase())).flatMap(x => x);
 
@@ -455,7 +455,7 @@ class App {
         this.filterTagMulti = this.recipes.filter(el => {
             // je compare mon tableau avec mes tag selectionné à tous les tableaux ingrédient ustensils et appliance de chaque recette 
             // i c'est tous les éléments de arrtag
-            return this.arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i))
+            return this.arrTags.map(item => item.value).every(i => el.appliance.toLowerCase().includes(i) || el.ustensils.includes(i) || el.ingredients.map(ingredient => ingredient.ingredient.toLowerCase()).includes(i));
         });
 
         // FONCTION pour rafraîchir les listes
@@ -471,7 +471,7 @@ class App {
         this.crosses = document.querySelectorAll('.cross-tag');
         for (let i = 0; i < this.crosses.length; i++) {
             this.crosses[i].addEventListener('click', (e) => {
-                this.clickCross(e)
+                this.clickCross(e);
             });
         }
     }
